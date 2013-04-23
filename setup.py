@@ -22,13 +22,13 @@ setup(name='baustellenac',
         "Paste",
         "PasteDeploy",
         "PasteScript",
-        "userbase",
         "pymongo",
+        "wtforms",
         "mongogogo",
         "setuptools",
       ],
       entry_points="""
-      [nopaste.app_factory]
+      [paste.app_factory]
       main = baustellenac.app:app
       """,
       )

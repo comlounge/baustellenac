@@ -1,0 +1,146 @@
+{% import "macros.html" as macros with context %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{{title}}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+    
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    
+        <!-- Le styles -->
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600,700,800' rel='stylesheet' type='text/css'>
+        
+        {% block css %}
+        <link href="{{url_for("static", filename="css/main.css")}}" rel="stylesheet">
+        <link type="text/css" href="{{url_for("static", filename="css/smoothness/jquery-ui-1.8.20.custom.css")}}" rel="stylesheet" /> 
+        {#
+            <link rel="shortcut icon" href="{{url_for("static", filename="img/favicon.ico")}}" type="image/x-icon">
+            <link rel="icon" href="{{url_for("static", filename="img/favicon.ico")}}" type="image/x-icon">
+        #}
+        {% endblock %}
+        <style>
+            body {
+                padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+            }
+        </style>
+        {% block head %}
+        {% endblock %}
+    
+    </head>
+
+    <body>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="{{url_for("index")}}">Baustellen Aachen</a>
+                    <ul class="nav">
+                        <li class="active"><a href="#">Startseite</a></li>
+                    </ul>
+                    {% if is_admin %}
+                        <ul class="nav pull-right"> 
+                            <li><a href="{{url_for("index")}}"><b>ADMINISTRATION</b></a></li>
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+      
+        {% block container %}
+        <div class="container" id="content">
+            {% for m in get_flashes(with_categories=True) %}
+                <div class="alert alert-{{m[0]}}">
+                <strong>{{m[1]}}</strong><br>
+                </div>
+            {% endfor %}
+
+    
+            {% block content %}
+            {% block main_content %}
+            {% endblock %}
+            {% endblock %}
+        </div> <!-- /container -->
+        <footer>
+            <div class="container">
+                <a href="/impressum.html">Impressum</a>
+            </div>
+        </footer>
+        {% endblock %}
+
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="{{url_for("static", filename="js/jquery.min.js")}}"></script>
+        <script src="{{url_for("static", filename="js/underscore.min.js")}}"></script>
+        <script src="{{url_for("static", filename="js/jquery.form.js")}}"></script>
+        <script src="{{url_for("static", filename="js/jquery.metadata.min.js")}}"></script>
+        <script src="{{url_for("static", filename="js/autonumeric.min.js")}}"></script>
+        <script src="{{url_for("static", filename="js/jquery.numeric.min.js")}}"></script>
+        <script src="{{url_for("static", filename="js/jquery.colorbox-min.js")}}"></script>
+        <script src="{{url_for("static", filename="js/jquery.validate.min.js")}}"></script>
+        <script src="{{url_for("static", filename="js/messages_de.js")}}"></script>
+        <script src="{{url_for("static", filename="js/jquery.ui.min.js")}}"></script>
+        <script src="{{url_for("static", filename="js/jquery.ui.datepicker-de.js")}}"></script>
+        
+        <script>
+            $(document).ready( function () {
+                $('.popinfo').popover();
+                $('.ttip').tooltip();
+                $(".btn-toggle").click( function () {
+                    $(this).button("toggle");
+                    var f = $(this).attr("for");
+                    if ($(this).hasClass("active")) {
+                        $(this).find(".icon").addClass("icon-ok");
+                        $("#"+f).attr("value", "1");
+                    } else {
+                        $(this).find(".icon").removeClass("icon-ok");
+                        $("#"+f).attr("value", "0");
+                    }
+                    var form = $(this).parents("form.live");
+                    $(this).parents("form.live").submit();
+                    return false;
+                });
+                $( ".datepicker" ).datepicker();                                                                                   
+            });
+        </script>
+        {% block js %}
+        {% endblock %}
+        {% block js2 %}
+        {% endblock %}
+
+        <script src="{{url_for("static", filename="js/bootstrap-dropdown.js")}}"></script>
+        <script src="{{url_for("static", filename="js/bootstrap-transition.js")}}"></script>
+        <script src="{{url_for("static", filename="js/bootstrap-modal.js")}}"></script>
+        <script src="{{url_for("static", filename="js/bootstrap-button.js")}}"></script>
+        <script src="{{url_for("static", filename="js/bootstrap-tab.js")}}"></script>
+        <script src="{{url_for("static", filename="js/bootstrap-tooltip.js")}}"></script>
+        <script src="{{url_for("static", filename="js/bootstrap-alert.js")}}"></script>
+        <script src="{{url_for("static", filename="js/bootstrap-popover.js")}}"></script>
+        {#
+            <script src="{{url_for("static", filename="js/forms.js")}}"></script>
+        #}
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+                
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                
+        {# 
+        <script src="/static/js/bootstrap-alert.js"></script>
+        <script src="/static/js/bootstrap-scrollspy.js"></script>
+        <script src="/static/js/bootstrap-collapse.js"></script>
+        <script src="/static/js/bootstrap-carousel.js"></script>
+        <script src="/static/js/bootstrap-typeahead.js"></script>
+        #}
+    </body>
+</html>

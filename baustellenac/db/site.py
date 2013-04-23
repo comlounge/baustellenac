@@ -1,7 +1,7 @@
 from mongogogo import *
 import datetime
 
-__all__=["Barcamp", "BarcampSchema", "Barcamps"]
+__all__=["Site", "SiteSchema", "Sites"]
 
 class BaseError(Exception):
     """base class for exceptions"""
@@ -52,11 +52,11 @@ class SiteSchema(Schema):
     # this field describes an approx. time frame in plain text
     approx_timeframe    = String()
 
-    sections            = List(SecionSchema()) # list of sections/streets. Only one if it's only one location
+    sections            = List(SectionSchema()) # list of sections/streets. Only one if it's only one location
 
 class Site(Record):
 
-    schema = Site()
+    schema = SiteSchema()
     _protected = ['schema', 'collection', '_protected', '_schemaless', 'default_values', 'workflow_states', 'initial_workflow_state']
     initial_workflow_state = "created"
     default_values = {
