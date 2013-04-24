@@ -25,28 +25,31 @@ class WorkflowError(BaseError):
 
 class SectionSchema(Schema):
     """a location described by name, lat and long"""
-    street = String()
+    start_street = String()
+    end_street = String()
     start_number = String()
     end_number = String()
     city = String()
     zip = String()
-    lat = Float()
-    lng = Float()
+    start_lat = Float()
+    start_lng = Float()
+    end_lat = Float()
+    end_lng = Float()
 
 class SiteSchema(Schema):
     """main schema for a street construction site"""
 
     created             = DateTime()
     updated             = DateTime()
-    workflow            = String(required = True, default = "created") 
-    
+    workflow            = String(required = True, default = "created")
+
     # base data
-    name                = String(required = False) # project name or something like that 
+    name                = String(required = False) # project name or something like that
     description         = String(required = False) # long description if given
     organisation        = String() # who is doing this?
 
     # these field define when to show it on the map
-    start_date          = Date() # start date of project 
+    start_date          = Date() # start date of project
     end_date            = Date() # approx. end date of project
 
     # this field describes an approx. time frame in plain text
@@ -71,7 +74,7 @@ class Site(Record):
 
     def set_workflow(self, new_state):
         """set the workflow to a new state"""
-        old_state = self.workflow                                                                                                                                                      
+        old_state = self.workflow
         if old_state is None:
             old_state = self.initial_workflow_state
         allowed_states = self.workflow_states[old_state]
@@ -90,12 +93,12 @@ class Site(Record):
             m = getattr(self, "on_wf_"+new_state)
             m(old_state = old_state)
         self.workflow = new_state
-   
+
     @property
     def public(self):
         """return whether the barcamp is public or not"""
         return self.workflow in ['public']
 
 class Sites(Collection):
-    
+
     data_class = Site

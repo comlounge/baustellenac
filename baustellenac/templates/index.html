@@ -1,16 +1,72 @@
 {% extends "master.html" %}
 
+{% block head %}
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+{% endblock %}
+
 {% block content %}
     <h1 id="logo">Baustellen Aachen
     </h1>
     <div class="row">
         <div class="span9">
-        A
+            <div id="map"></div>
         </div>
         <div class="widgets">
-        B
+            <ul>
+                {% for site in sites %}
+                    <li>
+                        <div class="site"
+                            data-name="{{site.name}}"
+                            data-start_lat="{{site.sections[0].start_lat}}"
+                            data-start_lng="{{site.sections[0].start_lng}}"
+                            data-end_lat="{{site.sections[0].end_lat}}"
+                            data-end_lng="{{site.sections[0].end_lng}}">
+                            {{site.name}} ({{site.approx_timeframe}})
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 
 {% endblock %}
 
+{% block js %}
+    <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
+    <script type="text/javascript">
+        var map = L.map('map').setView([50.7753455, 6.0838868], 13);
+        L.tileLayer('http://{s}.tile.cloudmade.com/f21ddba0627f45a7820c966a23ca9002/997/256/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+            maxZoom: 18
+        }).addTo(map);
+
+        $('.site').each(function(){
+            var start_lat = $(this).data('start_lat');
+            var start_lng = $(this).data('start_lng');
+            var end_lat = $(this).data('end_lat');
+            var end_lng = $(this).data('end_lng');
+            var start_point = new L.LatLng(start_lat, start_lng)
+            var end_point = new L.LatLng(end_lat, end_lng)
+            var start_marker = L.marker([start_lat, start_lng]).addTo(map);
+            var end_marker = L.marker([start_lat, end_lng]).addTo(map);
+
+            routing_url = "http://routes.cloudmade.com/f21ddba0627f45a7820c966a23ca9002/api/0.3/"+start_lat+","+start_lng+","+end_lat+","+end_lng+"/foot.js?lang=de&units=km"
+            $.ajax({
+                url:routing_url,
+                dataType: 'jsonp',
+                success:function(data){
+                    if (data['status'] == 0) {
+                        var polyline = L.polyline(data.route_geometry, {color: 'red'}).addTo(map);
+                    }
+                },
+                error:function(){
+                    alert("Error");
+                },
+            });
+
+
+        });
+
+
+    </script>
+{% endblock %}

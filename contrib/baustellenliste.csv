@@ -1,32 +1,19 @@
-#;Träger;Träger 2;Titel;von Strasse;von HNR;bis Strasse;bis HNR;Beschreibung;Start genau;Ende genau;Start text;Ende text;;
-1;STAWAG;;Abteistrasse;Viehhofstrasse;1;Abteistrasse;11;Kanalerneuerung und Fernwärmeerweiterung;15.11.2012;29.2.2013;Mitte November;Februar 2013;;
-2;STAWAG;Stadt Aachen;Büchel;Körbergasse;;Markt ;;"Nach Abschluss der unterirdischen Sanierung des Kanals ist die Oberfläche im Abschnitt Bahkauv bis Körbergasse pünktlich zum Weihnachtsmarkt fertig gestellt worden. Die Straßenbauarbeiten im Bereich Körbergasse bis Markt werden nach der Unterbrechung durch den Weihnachtsmarkt Anfang 2013 fortgesetzt, Abschluss voraussichtlich Ende April 2013.";01.01.2013;30.04.2013;;Ende April 2013;;
-3;STAWAG;Stadt Aachen;Gewerbepark Brand;Gewerbepark Brand;;Gewerbepark Brand;;Erschließung des Gewerbegebietes, Kanalbau, Versorgungsleitungen, Straßenbau etwa ab März 2013;;31.12.2013;05.11.2013;Ende 2013;;
-4;Bau- und Liegenschaftsbetrieb NRW (BLB);;Campus Melaten;Pauwelsstrasse;;Forckenbeckstraße;;"Umbau im Zusammenhang mit Erschließung Campus Melaten, Arbeiten an Versorgungsleitungen im Bereich der Parkspange (Pauwelsstr. und Forckenbeckstr.), keine Sperrungen, aber Verlegungen. der Kreisverkehr Nord im Campus Melaten ist fertiggestellt. Fertigstellung der Forckenbeckstraße und Pauwelsstraße sowie des Kreisverkehrs ab 2./3. Juni, ab dann kann die Stiewistraße nicht mehr befahren werden. Die ASEAG Busse werden ab dann über die Umwelttrasse Pauwelsstraße zum Klinikum geleitet, Haltestellen werden eingerichtet. Sperrung der Fußgänger- und Radfahrbrücke Melatener Straße bis Sommer 2013. Endausbau wird etwa Juli 2013 fertiggestellt. Ausführliche Informationen: http://geoserver.nacken-ingenieure.de ";01.01.2013;31.07.2013;;bis Juli 2013;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;
+#;Träger;Träger 2;Titel;von Strasse;von HNR;bis Strasse;bis HNR;Beschreibung;Start genau;Ende genau;Start text;Ende text
+1;STAWAG;;Abteistrasse;Viehhofstrasse;1;Abteistrasse;11;Kanalerneuerung und Fernwärmeerweiterung;15.11.2012;28.02.2013;Mitte November;Februar 2013
+2;STAWAG;Stadt Aachen;Büchel;Körbergasse;;Markt ;;"Nach Abschluss der unterirdischen Sanierung des Kanals ist die Oberfläche im 
+Abschnitt Bahkauv bis Körbergasse pünktlich zum Weihnachtsmarkt fertig gestellt 
+worden. Die Straßenbauarbeiten im Bereich Körbergasse bis Markt werden nach 
+der Unterbrechung durch den Weihnachtsmarkt Anfang 2013 fortgesetzt, 
+Abschluss voraussichtlich Ende April 2013.";01.01.2013;30.04.2013;;Ende April 2013
+3;STAWAG;Stadt Aachen;Gewerbepark Brand;Gewerbepark Brand;;Gewerbepark Brand;;Erschließung des Gewerbegebietes, Kanalbau, Versorgungsleitungen, Straßenbau etwa ab März 2013;05.11.2013;31.12.2013;Anfang November;Ende 2013
+4;Bau- und Liegenschaftsbetrieb NRW (BLB);;Campus Melaten;Pauwelsstrasse;;Forckenbeckstraße;;"Umbau im Zusammenhang mit Erschließung Campus Melaten, Arbeiten an 
+Versorgungsleitungen im Bereich der Parkspange (Pauwelsstr. und 
+Forckenbeckstr.), keine Sperrungen, aber Verlegungen. 
+der Kreisverkehr Nord im Campus Melaten ist fertiggestellt. 
+Fertigstellung der Forckenbeckstraße und Pauwelsstraße sowie des Kreisverkehrs 
+ab 2./3. Juni, ab dann kann die Stiewistraße nicht mehr befahren werden. 
+Die ASEAG Busse werden ab dann über die Umwelttrasse Pauwelsstraße zum 
+Klinikum geleitet, Haltestellen werden eingerichtet. Sperrung der Fußgänger- und 
+Radfahrbrücke Melatener Straße bis Sommer 2013. 
+Endausbau wird etwa Juli 2013 fertiggestellt. Ausführliche Informationen: 
+http://geoserver.nacken-ingenieure.de ";01.01.2013;31.07.2013;;bis Juli 2013

@@ -1,5 +1,7 @@
 #encoding=utf8
 
+import pymongo
+
 from .. import BaseHandler
 
 class IndexView(BaseHandler):
@@ -9,7 +11,9 @@ class IndexView(BaseHandler):
 
     def get(self):
         """render the view"""
-        return self.render()
+        return self.render(
+            sites = self.config.dbs.baustellen.find(),
+        )
     post = get
 
 class Impressum(BaseHandler):
@@ -20,4 +24,3 @@ class Impressum(BaseHandler):
     def get(self):
         """render the view"""
         return self.render()
-

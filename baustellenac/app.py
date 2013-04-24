@@ -48,7 +48,7 @@ else:
 def get_locale(handler):
     return "de" # for now
 
-### 
+###
 ### APP
 ###
 
@@ -71,7 +71,7 @@ class BaustellenApp(Application):
     betreiber = {
         1 : "Stadt Aachen",
         2 : "Aachener Stadtbetrieb",
-        3 : "STAWAG", 
+        3 : "STAWAG",
         4 : "NetAachen"
     }
 
@@ -99,6 +99,6 @@ class BaustellenApp(Application):
 
 
 def app(config, **local_config):
-    """return the config""" 
+    """return the config"""
     return BaustellenApp(__name__, local_config)
 
