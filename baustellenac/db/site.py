@@ -42,6 +42,7 @@ class SiteSchema(Schema):
 
     # base data
     name                = String(required = False) # project name or something like that
+    subtitle            = String(required = False) # project name or something like that
     description         = String(required = False) # long description if given
     organisation        = String() # who is doing this?
 

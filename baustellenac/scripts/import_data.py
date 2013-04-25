@@ -23,7 +23,7 @@ class ImportData(ScriptBase):
                 if d['#'].strip():
                     organisation = unicode(d['Träger'], 'utf-8')
                     for i in range(2,5):
-                        if 'Träger %d' %i in d.keys():
+                        if d['Träger %d' %i] != '':
                             organisation = '%s/%s' %(organisation, d['Träger %d' %i])
                     site_data = {
                         'name' : unicode(d['Titel'], 'utf-8'),

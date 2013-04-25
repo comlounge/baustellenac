@@ -59,6 +59,9 @@ $.fn.sites = (opts = {}) ->
         m.find('.modal-header h3').html(data['name'])
 
         body = ""
+        subtitle = $('<div class="row"></div>')
+            .append('<div class="span2">Untertitel</div>')
+            .append('<div class="span4">'+data['subtitle']+'</div>')
         desc = $('<div class="row"></div>')
             .append('<div class="span2">Bescreibung</div>')
             .append('<div class="span4">'+data['description']+'</div>')
@@ -70,6 +73,7 @@ $.fn.sites = (opts = {}) ->
             .append('<div class="span4">'+data['approx_timeframe']+'</div>')
 
         m.find('.modal-body').html('')
+        m.find('.modal-body').append(subtitle)
         m.find('.modal-body').append(desc)
         m.find('.modal-body').append(organisation)
         m.find('.modal-body').append(approx_time)
@@ -98,7 +102,8 @@ $.fn.sites = (opts = {}) ->
 
     make_infopopup = (elem) ->
         info = '<b>'+elem.data('name')+'</b><br/><br/>'
-        info += elem.data('description')+'<br/><br/>'
+        if elem.data('subtitle')
+            info += elem.data('subtitle')+'<br/><br/>'
         info += 'Träger: '+elem.data('organisation')+'<br/><br/>'
         info += 'Vorr. Dauer: '+elem.data('approx_timeframe')+'<br/><br/>'
         info += '<button class="moreinfo" type="button" data-id="'+elem.data('id')+'">Mehr Informationen</button>'

@@ -54,14 +54,16 @@ $.fn.sites = function(opts) {
     });
   };
   create_infomodal = function(data) {
-    var approx_time, body, desc, m, organisation;
+    var approx_time, body, desc, m, organisation, subtitle;
     m = $('#infomodal');
     m.find('.modal-header h3').html(data['name']);
     body = "";
+    subtitle = $('<div class="row"></div>').append('<div class="span2">Untertitel</div>').append('<div class="span4">' + data['subtitle'] + '</div>');
     desc = $('<div class="row"></div>').append('<div class="span2">Bescreibung</div>').append('<div class="span4">' + data['description'] + '</div>');
     organisation = $('<div class="row"></div>').append('<div class="span2">Träger</div>').append('<div class="span4">' + data['organisation'] + '</div>');
     approx_time = $('<div class="row"></div>').append('<div class="span2">Vorr. Zeitrahmen</div>').append('<div class="span4">' + data['approx_timeframe'] + '</div>');
     m.find('.modal-body').html('');
+    m.find('.modal-body').append(subtitle);
     m.find('.modal-body').append(desc);
     m.find('.modal-body').append(organisation);
     m.find('.modal-body').append(approx_time);
@@ -92,7 +94,9 @@ $.fn.sites = function(opts) {
   make_infopopup = function(elem) {
     var info;
     info = '<b>' + elem.data('name') + '</b><br/><br/>';
-    info += elem.data('description') + '<br/><br/>';
+    if (elem.data('subtitle')) {
+      info += elem.data('subtitle') + '<br/><br/>';
+    }
     info += 'Träger: ' + elem.data('organisation') + '<br/><br/>';
     info += 'Vorr. Dauer: ' + elem.data('approx_timeframe') + '<br/><br/>';
     info += '<button class="moreinfo" type="button" data-id="' + elem.data('id') + '">Mehr Informationen</button>';
