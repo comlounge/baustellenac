@@ -5,6 +5,14 @@ $.fn.sites = (opts = {}) ->
     max_zoom = 18
     map = L.map('map').setView([50.7753455, 6.0838868], map_zoom)
     markers = {}
+    icon = L.icon(
+        iconUrl: '/static/img/Under_construction_icon-red.svg',
+        iconSize: [38, 95],
+        iconAnchor: [22, 94],
+        popupAnchor: [-3, -76],
+        shadowSize: [68, 95],
+        shadowAnchor: [22, 94]
+    )
 
     cloudmate_api_key = 'f21ddba0627f45a7820c966a23ca9002'
     map_url = 'http://{s}.tile.cloudmade.com/'+cloudmate_api_key+'/997/256/{z}/{x}/{y}.png'
@@ -74,7 +82,7 @@ $.fn.sites = (opts = {}) ->
         end_lat = elem.data('end_lat')
         end_lng = elem.data('end_lng')
 
-        start_marker = L.marker([start_lat, start_lng]).addTo(map)
+        start_marker = L.marker([start_lat, start_lng], {icon: icon}).addTo(map)
         markers[elem.data('id')] = start_marker
         #end_marker = L.marker([start_lat, end_lng]).addTo(map)
 
