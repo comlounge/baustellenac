@@ -68,16 +68,26 @@ $.fn.sites = function(opts) {
     return console.log(desc);
   };
   make_marker = function(elem) {
-    var end_lat, end_lng, start_lat, start_lng, start_marker;
+    var end_lat, end_lng, lat, lng, marker, start_lat, start_lng;
     start_lat = elem.data('start_lat');
     start_lng = elem.data('start_lng');
     end_lat = elem.data('end_lat');
     end_lng = elem.data('end_lng');
-    start_marker = L.marker([start_lat, start_lng], {
-      icon: icon
-    }).addTo(map);
-    markers[elem.data('id')] = start_marker;
-    return start_marker.bindPopup(make_infopopup(elem));
+    if (start_lat !== 'None' && start_lng !== 'None') {
+      if (end_lat !== 'None' && end_lng !== 'None') {
+        lat = (start_lat + end_lat) / 2;
+        lng = (start_lng + end_lng) / 2;
+        make_route(start_lat, start_lng, end_lat, end_lng);
+      } else {
+        lat = start_lat;
+        lng = start_lng;
+      }
+      marker = L.marker([lat, lng], {
+        icon: icon
+      }).addTo(map);
+      markers[elem.data('id')] = marker;
+      return marker.bindPopup(make_infopopup(elem));
+    }
   };
   make_infopopup = function(elem) {
     var info;

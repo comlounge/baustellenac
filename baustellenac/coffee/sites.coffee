@@ -82,13 +82,19 @@ $.fn.sites = (opts = {}) ->
         end_lat = elem.data('end_lat')
         end_lng = elem.data('end_lng')
 
-        start_marker = L.marker([start_lat, start_lng], {icon: icon}).addTo(map)
-        markers[elem.data('id')] = start_marker
-        #end_marker = L.marker([start_lat, end_lng]).addTo(map)
+        if start_lat != 'None' and start_lng != 'None'
+            if end_lat != 'None' and end_lng != 'None'
+                lat = (start_lat + end_lat)/2
+                lng = (start_lng + end_lng)/2
+                make_route(start_lat,start_lng,end_lat,end_lng)
+            else
+                lat = start_lat
+                lng = start_lng
 
-        start_marker.bindPopup(make_infopopup(elem))
+            marker = L.marker([lat, lng], {icon: icon}).addTo(map)
+            markers[elem.data('id')] = marker
+            marker.bindPopup(make_infopopup(elem))
 
-        #make_route(start_lat,start_lng,end_lat,end_lng)
 
     make_infopopup = (elem) ->
         info = '<b>'+elem.data('name')+'</b><br/><br/>'

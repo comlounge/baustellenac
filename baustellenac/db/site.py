@@ -25,10 +25,7 @@ class WorkflowError(BaseError):
 
 class SectionSchema(Schema):
     """a location described by name, lat and long"""
-    start_street = String()
-    end_street = String()
-    start_number = String()
-    end_number = String()
+    street = String()
     city = String()
     zip = String()
     start_lat = Float()
