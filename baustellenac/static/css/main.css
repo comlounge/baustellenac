@@ -5486,3 +5486,6 @@ ul#blog-reports li .author {
 #map {
   height: 580px;
 }
+.site {
+  cursor: pointer;
+}

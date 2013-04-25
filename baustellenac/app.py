@@ -86,6 +86,10 @@ class BaustellenApp(Application):
     routes = [
         URL('/', 'index', handlers.index.IndexView),
         URL('/impressum.html', 'impressum', handlers.index.Impressum),
+
+        # api
+        URL('/api/sites.json', 'api_all_sites', handlers.api.AllSites),
+        URL('/api/site/<site_id>.json', 'api_site', handlers.api.Site),
     ]
 
     def finalize_setup(self):

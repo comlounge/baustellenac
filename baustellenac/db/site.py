@@ -102,3 +102,4 @@ class Site(Record):
 class Sites(Collection):
 
     data_class = Site
+    create_ids = True

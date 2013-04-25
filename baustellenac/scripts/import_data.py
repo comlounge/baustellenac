@@ -46,6 +46,7 @@ class ImportData(ScriptBase):
                     site_data['sections'] = [section]
 
                     site = Site(site_data)
+                    del site['_id']
                     self.app.config.dbs.baustellen.save(site)
 
 

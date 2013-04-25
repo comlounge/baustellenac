@@ -5,6 +5,18 @@
 {% endblock %}
 
 {% block content %}
+    <div id="infomodal" class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Modal header</h3>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn">Schließen</a>
+        </div>
+    </div>
+
     <h1 id="logo">Baustellen Aachen
     </h1>
     <div class="row">
@@ -16,6 +28,7 @@
                 {% for site in sites %}
                     <li>
                         <div class="site"
+                            data-id="{{site._id}}"
                             data-name="{{site.name}}"
                             data-description="{{site.description}}"
                             data-organisation="{{site.organisation}}"
