@@ -47,8 +47,8 @@ class SiteSchema(Schema):
     organisation        = String() # who is doing this?
 
     # these field define when to show it on the map
-    start_date          = Date() # start date of project
-    end_date            = Date() # approx. end date of project
+    start_date          = DateTime() # start date of project
+    end_date            = DateTime() # approx. end date of project
 
     # this field describes an approx. time frame in plain text
     approx_timeframe    = String()

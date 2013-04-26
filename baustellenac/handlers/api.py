@@ -19,5 +19,6 @@ class Site(BaseHandler):
     @asjson()
     def get(self, site_id):
         """render the view"""
+        #print self.config.dbs.baustellen.get(site_id)
         return self.config.dbs.baustellen.get(site_id)
     post = get

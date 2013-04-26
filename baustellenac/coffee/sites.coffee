@@ -63,7 +63,7 @@ $.fn.sites = (opts = {}) ->
             .append('<div class="span2">Untertitel</div>')
             .append('<div class="span4">'+data['subtitle']+'</div>')
         desc = $('<div class="row"></div>')
-            .append('<div class="span2">Bescreibung</div>')
+            .append('<div class="span2">Beschreibung</div>')
             .append('<div class="span4">'+data['description']+'</div>')
         organisation = $('<div class="row"></div>')
             .append('<div class="span2">Träger</div>')
@@ -71,14 +71,28 @@ $.fn.sites = (opts = {}) ->
         approx_time = $('<div class="row"></div>')
             .append('<div class="span2">Vorr. Zeitrahmen</div>')
             .append('<div class="span4">'+data['approx_timeframe']+'</div>')
+        start_date = new Date(data['start_date'])
+        start_time = $('<div class="row"></div>')
+            .append('<div class="span2">Beginn</div>')
+            .append('<div class="span4">'+start_date.toLocaleDateString('de')+'</div>')
+        end_date = new Date(data['end_date'])
+        end_time = $('<div class="row"></div>')
+            .append('<div class="span2">Ende</div>')
+            .append('<div class="span4">'+end_date.toLocaleDateString('de')+'</div>')
+        adr = data['sections'][0]['street']+', '+data['sections'][0]['zip']+' '+data['sections'][0]['city']
+        address = $('<div class="row"></div>')
+            .append('<div class="span2">Adresse</div>')
+            .append('<div class="span4">'+adr+'</div>')
 
         m.find('.modal-body').html('')
-        m.find('.modal-body').append(subtitle)
-        m.find('.modal-body').append(desc)
-        m.find('.modal-body').append(organisation)
-        m.find('.modal-body').append(approx_time)
-
-        console.log(desc)
+        m.find('.modal-body')
+            .append(subtitle)
+            .append(desc)
+            .append(organisation)
+            .append(approx_time)
+            .append(start_time)
+            .append(end_time)
+            .append(address)
 
     make_marker = (elem) ->
         start_lat = elem.data('start_lat')
@@ -90,7 +104,7 @@ $.fn.sites = (opts = {}) ->
             if end_lat != 'None' and end_lng != 'None'
                 lat = (start_lat + end_lat)/2
                 lng = (start_lng + end_lng)/2
-                make_route(start_lat,start_lng,end_lat,end_lng)
+                #make_route(start_lat,start_lng,end_lat,end_lng)
             else
                 lat = start_lat
                 lng = start_lng
@@ -103,8 +117,8 @@ $.fn.sites = (opts = {}) ->
     make_infopopup = (elem) ->
         info = '<b>'+elem.data('name')+'</b><br/><br/>'
         if elem.data('subtitle')
-            info += elem.data('subtitle')+'<br/><br/>'
-        info += 'Träger: '+elem.data('organisation')+'<br/><br/>'
+            info += elem.data('subtitle')+'<br/>'
+        info += 'Träger: '+elem.data('organisation')+'<br/>'
         info += 'Vorr. Dauer: '+elem.data('approx_timeframe')+'<br/><br/>'
         info += '<button class="moreinfo" type="button" data-id="'+elem.data('id')+'">Mehr Informationen</button>'
         #info += '<a href="#" class="pull-right">mehr...</a><br/>'

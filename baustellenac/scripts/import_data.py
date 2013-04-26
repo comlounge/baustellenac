@@ -59,26 +59,28 @@ class ImportData(ScriptBase):
 
         if len(sub_streets) > 0:
             latlngs = []
-            for ss in sub_streets:
-                query = '%s+and+%s' %(streets[0]['name'], ss.strip())
-                url = gm_url %query
-                data = requests.get(url).json()
-                if len(data['results']) > 0:
-                    latlngs.append(data['results'][0]['geometry']['location'])
+            #for ss in sub_streets:
+            #    query = '%s+and+%s' %(streets[0]['name'], ss.strip())
+            #    url = gm_url %query
+            #    data = requests.get(url).json()
+            #    if len(data['results']) > 0:
+            #        latlngs.append(data['results'][0]['geometry']['location'])
 
             section = {
                 'street'       : unicode(streets[0]['name'], 'utf-8'),
                 'city'         : u'Aachen',
                 'zip'          : u'52064', # TODO: determine correct ZIP
-                'start_lat'    : latlngs[0]['lat'],
-                'start_lng'    : latlngs[0]['lng'],
+                #'start_lat'    : latlngs[0]['lat'],
+                #'start_lng'    : latlngs[0]['lng'],
             }
-            if len(latlngs) > 1:
-                section['end_lat'] = latlngs[1]['lat']
-                section['end_lng'] = latlngs[1]['lng']
+            start_latlng = self.get_gm_latlng(streets[0]['name'])
+            if len(start_latlng ) is not None:
+                section['start_lat'] = start_latlng['lat']
+                section['start_lng'] = start_latlng['lng']
             sections.append(section)
 
         else:
+            #return []
             for s in streets:
                 # check for streetnumbers
                 n_match = re.search(r'([0-9]+(\s*(-|/)*\s*[0-9]+)*)', s['name'])
@@ -101,10 +103,16 @@ class ImportData(ScriptBase):
                     'city'         : u'Aachen',
                     'zip'          : u'52064', # TODO: determine correct ZIP
                 }
-                section['start_lat'], section['start_lng'] = self.get_osm_latlng(s['name'], s['number'][0])
+                start_latlng = self.get_gm_latlng(s['name'], s['number'][0])
+                if start_latlng is not None:
+                    section['start_lat'] = start_latlng['lat']
+                    section['start_lng'] = start_latlng['lng']
                 if len(s['number']) > 1:
                     section['end_number'] = s['number'][1]
-                    section['end_lat'], section['end_lng'] = self.get_osm_latlng(s['name'], s['number'][1])
+                    end_latlng = self.get_gm_latlng(s['name'], s['number'][1])
+                    if end_latlng is not None:
+                        section['end_lat'] = end_latlng['lat']
+                        section['end_lng'] = end_latlng['lng']
 
                 sections.append(section)
 
@@ -114,7 +122,17 @@ class ImportData(ScriptBase):
         #
         #print streets
 
-    def get_osm_latlng(self, street, number):
+    def get_gm_latlng(self, street, number=None):
+        query = street
+        if number is not None:
+            query = '%s+%s' %(query,number)
+        url = gm_url %query
+        data = requests.get(url).json()
+        if len(data['results']) > 0:
+            return data['results'][0]['geometry']['location']
+        return None
+
+    def get_osm_latlng(self, street, number=None):
         url = osm_url %(street, number)
         data = requests.get(url).json()
         if len(data) > 0:
@@ -128,8 +146,8 @@ class ImportData(ScriptBase):
 
 def importdata():
     f = ImportData()
+    f.app.config.dbs.baustellen._remove()
     f()
 
 if __name__=="__main__":
-    f = ImportData()
-    f()
+    importdata()
