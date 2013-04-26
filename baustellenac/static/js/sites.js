@@ -12,7 +12,6 @@ $.fn.sites = function(opts) {
   icon_default = L.icon({
     iconUrl: '/static/img/Under_construction_icon-red.svg',
     iconSize: [38, 95],
-    iconAnchor: [22, 94],
     popupAnchor: [-3, -76],
     shadowSize: [68, 95],
     shadowAnchor: [22, 94]
@@ -20,7 +19,6 @@ $.fn.sites = function(opts) {
   icon_sidewalk = L.icon({
     iconUrl: '/static/img/Under_construction_icon-yellow.svg',
     iconSize: [32, 75],
-    iconAnchor: [22, 94],
     popupAnchor: [-3, -76],
     shadowSize: [68, 95],
     shadowAnchor: [22, 94]

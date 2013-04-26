@@ -5489,3 +5489,8 @@ ul#blog-reports li .author {
 .site {
   cursor: pointer;
 }
+.widgets {
+  height: 580px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}

@@ -24,10 +24,10 @@
             <div id="map"></div>
         </div>
         <div class="widgets">
-            <ul>
+            <table class="table table-bordered table-hover table-condensed">
                 {% for site in sites %}
-                    <li>
-                        <div class="site"
+                    <tr>
+                        <td class="site"
                             data-id="{{site._id}}"
                             data-name="{{site.name}}"
                             data-subtitle="{{site.subtitle}}"
@@ -40,11 +40,12 @@
                             data-start_lng="{{site.sections[0].start_lng}}"
                             data-end_lat="{{site.sections[0].end_lat}}"
                             data-end_lng="{{site.sections[0].end_lng}}">
-                            {{site.name}} ({{site.approx_timeframe}})
-                        </div>
-                    </li>
+                            {{site.name}}
+                            <span class="muted">({{site.approx_timeframe}})</span>
+                        </td>
+                    </tr>
                 {% endfor %}
-            </ul>
+            </table>
         </div>
     </div>
 

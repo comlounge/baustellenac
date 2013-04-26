@@ -907,3 +907,4 @@ ul#blog-reports li .author{font-size:12px;}
 .socialmedia{height:30px;overflow:hidden;}
 #map{height:580px;}
 .site{cursor:pointer;}
+.widgets{height:580px;overflow-x:hidden;overflow-y:auto;}
