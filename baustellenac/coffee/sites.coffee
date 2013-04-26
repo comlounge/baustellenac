@@ -45,7 +45,6 @@ $.fn.sites = (opts = {}) ->
             url: path,
             dataType: 'json',
             success: (data) ->
-                console.log(data)
                 create_infomodal(data)
                 $('#infomodal').modal('show')
             ,
@@ -115,9 +114,11 @@ $.fn.sites = (opts = {}) ->
 
 
     make_infopopup = (elem) ->
-        info = '<b>'+elem.data('name')+'</b><br/><br/>'
+        info = '<b>'+elem.data('name')+'</b><br/>'
         if elem.data('subtitle')
-            info += elem.data('subtitle')+'<br/>'
+            info += elem.data('subtitle')+'<br/><br/>'
+        else
+            info += '<br/>'
         info += 'Träger: '+elem.data('organisation')+'<br/>'
         info += 'Vorr. Dauer: '+elem.data('approx_timeframe')+'<br/><br/>'
         info += '<button class="moreinfo" type="button" data-id="'+elem.data('id')+'">Mehr Informationen</button>'
