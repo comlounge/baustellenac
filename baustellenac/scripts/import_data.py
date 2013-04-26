@@ -31,6 +31,7 @@ class ImportData(ScriptBase):
                         'description' : unicode(d['Beschreibung'], 'utf-8'),
                         'organisation' : organisation,
                         'approx_timeframe' : unicode(d['Datum_Text'], 'utf-8'),
+                        'sidewalk_only' : self.is_sidewalk_only(d),
                     }
                     if d['Start genau'].strip():
                         site_data['start_date'] = datetime.datetime.strptime(d['Start genau'], '%d.%m.%Y')
@@ -138,6 +139,14 @@ class ImportData(ScriptBase):
         if len(data) > 0:
             return (data[0]['lat'], data[0]['lon'])
         return (None, None)
+
+    def is_sidewalk_only(self, d):
+        if 'Gehweg' in d['Untertitel']:
+            return True
+        if 'FTTB' in d['Titel']:
+            return True
+        return False
+
 
     def extend_parser(self):
         """add the location of the file to the parser"""

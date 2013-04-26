@@ -5,9 +5,17 @@ $.fn.sites = (opts = {}) ->
     max_zoom = 18
     map = L.map('map').setView([50.7753455, 6.0838868], map_zoom)
     markers = {}
-    icon = L.icon(
+    icon_default = L.icon(
         iconUrl: '/static/img/Under_construction_icon-red.svg',
         iconSize: [38, 95],
+        iconAnchor: [22, 94],
+        popupAnchor: [-3, -76],
+        shadowSize: [68, 95],
+        shadowAnchor: [22, 94]
+    )
+    icon_sidewalk = L.icon(
+        iconUrl: '/static/img/Under_construction_icon-yellow.svg',
+        iconSize: [32, 75],
         iconAnchor: [22, 94],
         popupAnchor: [-3, -76],
         shadowSize: [68, 95],
@@ -108,13 +116,22 @@ $.fn.sites = (opts = {}) ->
                 lat = start_lat
                 lng = start_lng
 
+            icon = icon_default
+            if elem.data('sidewalk_only') == 'True'
+                icon = icon_sidewalk
+
+            console.log(elem.data('sidewalk_only'))
+
             marker = L.marker([lat, lng], {icon: icon}).addTo(map)
             markers[elem.data('id')] = marker
             marker.bindPopup(make_infopopup(elem))
 
 
     make_infopopup = (elem) ->
-        info = '<b>'+elem.data('name')+'</b><br/>'
+        info = '<b>'+elem.data('name')+'</b>'
+        if elem.data('sidewalk_only') == 'True'
+            info += ' (Nur auf dem Gehweg)'
+        info += '<br/>'
         if elem.data('subtitle')
             info += elem.data('subtitle')+'<br/><br/>'
         else
