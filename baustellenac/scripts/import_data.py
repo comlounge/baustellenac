@@ -74,7 +74,7 @@ class ImportData(ScriptBase):
                 #'start_lng'    : latlngs[0]['lng'],
             }
             start_latlng = self.get_gm_latlng(streets[0]['name'])
-            if len(start_latlng ) is not None:
+            if start_latlng is not None:
                 section['start_lat'] = start_latlng['lat']
                 section['start_lng'] = start_latlng['lng']
             sections.append(section)
