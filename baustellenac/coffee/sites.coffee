@@ -8,14 +8,14 @@ $.fn.sites = (opts = {}) ->
     icon_default = L.icon(
         iconUrl: '/static/img/Under_construction_icon-red.svg',
         iconSize: [38, 95],
-        popupAnchor: [-3, -76],
+        popupAnchor: [0, -15],
         shadowSize: [68, 95],
         shadowAnchor: [22, 94]
     )
     icon_sidewalk = L.icon(
         iconUrl: '/static/img/Under_construction_icon-yellow.svg',
         iconSize: [32, 75],
-        popupAnchor: [-3, -76],
+        popupAnchor: [0, -15],
         shadowSize: [68, 95],
         shadowAnchor: [22, 94]
     )
