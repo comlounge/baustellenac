@@ -74,10 +74,11 @@ class ImportData(ScriptBase):
                 #'start_lat'    : latlngs[0]['lat'],
                 #'start_lng'    : latlngs[0]['lng'],
             }
-            start_latlng = self.get_gm_latlng(streets[0]['name'])
+            start_latlng, exact_position = self.get_gm_latlng(streets[0]['name'])
             if start_latlng is not None:
                 section['start_lat'] = start_latlng['lat']
                 section['start_lng'] = start_latlng['lng']
+                section['exact_position'] = exact_position
             sections.append(section)
 
         else:
@@ -104,16 +105,18 @@ class ImportData(ScriptBase):
                     'city'         : u'Aachen',
                     'zip'          : u'52064', # TODO: determine correct ZIP
                 }
-                start_latlng = self.get_gm_latlng(s['name'], s['number'][0])
+                start_latlng, exact_position = self.get_gm_latlng(s['name'], s['number'][0])
                 if start_latlng is not None:
                     section['start_lat'] = start_latlng['lat']
                     section['start_lng'] = start_latlng['lng']
+                    section['exact_position'] = exact_position
                 if len(s['number']) > 1:
                     section['end_number'] = s['number'][1]
-                    end_latlng = self.get_gm_latlng(s['name'], s['number'][1])
+                    end_latlng, exact_position = self.get_gm_latlng(s['name'], s['number'][1])
                     if end_latlng is not None:
                         section['end_lat'] = end_latlng['lat']
                         section['end_lng'] = end_latlng['lng']
+                        section['exact_position'] = exact_position
 
                 sections.append(section)
 
@@ -130,7 +133,14 @@ class ImportData(ScriptBase):
         url = gm_url %query
         data = requests.get(url).json()
         if len(data['results']) > 0:
-            return data['results'][0]['geometry']['location']
+            # check if geodata is correct by checking 'formatted_address'
+            # if 'formatted_address' is of format 'Aachen, Germany', that means
+            # the exact location was not found and the center of the city was
+            # returned
+            exact = True
+            if len(data['results'][0]['formatted_address'].split(',')) == 2:
+                exact = False
+            return (data['results'][0]['geometry']['location'], exact)
         return None
 
     def get_osm_latlng(self, street, number=None):

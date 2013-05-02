@@ -32,6 +32,7 @@ class SectionSchema(Schema):
     start_lng = Float()
     end_lat = Float()
     end_lng = Float()
+    exact_position = Boolean()
 
 class SiteSchema(Schema):
     """main schema for a street construction site"""
