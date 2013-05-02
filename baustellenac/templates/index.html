@@ -17,35 +17,44 @@
         </div>
     </div>
 
-    <h1 id="logo">Baustellen Aachen
-    </h1>
-    <div class="row">
-        <div class="span9">
+    <div class="row-fluid columns content">
+        <div class="content-area">
             <div id="map"></div>
         </div>
-        <div class="widgets">
-            <table class="table table-bordered table-hover table-condensed">
-                {% for site in sites %}
-                    <tr>
-                        <td class="site"
-                            data-id="{{site._id}}"
-                            data-name="{{site.name}}"
-                            data-subtitle="{{site.subtitle}}"
-                            data-organisation="{{site.organisation}}"
-                            data-sidewalk_only="{{site.sidewalk_only}}"
-                            data-approx_timeframe="{{site.approx_timeframe}}"
-                            data-start_date="{{site.start_date}}"
-                            data-end_date="{{site.end_date}}"
-                            data-start_lat="{{site.sections[0].start_lat}}"
-                            data-start_lng="{{site.sections[0].start_lng}}"
-                            data-end_lat="{{site.sections[0].end_lat}}"
-                            data-end_lng="{{site.sections[0].end_lng}}">
-                            {{site.name}}
-                            <span class="muted">({{site.approx_timeframe}})</span>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
+        <div class="navigation">
+            <div id="legend" style="height: 40px;">
+                <h5>Legende</h5>
+                <div class="item">
+                    <img class="icon" src="/static/img/Under_construction_icon-red.svg">Baustelle auf Gehweg und Fahrbahn
+                </div>
+                <div class="item">
+                    <img class="icon" src="/static/img/Under_construction_icon-yellow.svg">Baustelle auf Gehweg
+                </div>
+            </div>
+            <div>
+                <table class="table table-hover table-condensed">
+                    {% for site in sites %}
+                        <tr>
+                            <td class="site"
+                                data-id="{{site._id}}"
+                                data-name="{{site.name}}"
+                                data-subtitle="{{site.subtitle}}"
+                                data-organisation="{{site.organisation}}"
+                                data-sidewalk_only="{{site.sidewalk_only}}"
+                                data-approx_timeframe="{{site.approx_timeframe}}"
+                                data-start_date="{{site.start_date}}"
+                                data-end_date="{{site.end_date}}"
+                                data-start_lat="{{site.sections[0].start_lat}}"
+                                data-start_lng="{{site.sections[0].start_lng}}"
+                                data-end_lat="{{site.sections[0].end_lat}}"
+                                data-end_lng="{{site.sections[0].end_lng}}">
+                                {{site.name}}
+                                <span class="muted">({{site.approx_timeframe}})</span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
         </div>
     </div>
 

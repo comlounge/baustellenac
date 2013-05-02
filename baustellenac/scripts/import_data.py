@@ -153,7 +153,7 @@ class ImportData(ScriptBase):
         self.parser.add_argument('filename', metavar='FILE', nargs=1, help='the csv file to read')
 
 
-def importdata():
+def import_data():
     f = ImportData()
     f.app.config.dbs.baustellen._remove()
     f()

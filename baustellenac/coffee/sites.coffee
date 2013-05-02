@@ -20,9 +20,8 @@ $.fn.sites = (opts = {}) ->
         shadowAnchor: [22, 94]
     )
 
-    cloudmate_api_key = 'f21ddba0627f45a7820c966a23ca9002'
-    map_url = 'http://{s}.tile.cloudmade.com/'+cloudmate_api_key+'/997/256/{z}/{x}/{y}.png'
-    map_attribution = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
+    map_url = $("body").data("tileurl")
+    map_attribution = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>, Baustellendaten von der <a href="http://aachen.de/baustellen">Stadt Aachen</a>. Informationen ohne Gewähr.'
 
 
     init = () ->
@@ -38,12 +37,22 @@ $.fn.sites = (opts = {}) ->
         $('.site').click(() ->
             markers[$(this).data('id')].openPopup()
         )
+        map.locate({setView: true, maxZoom: 2})
+        map.on('locationfound', onLocationFound)
 
         map.on('popupopen', () ->
             $('.moreinfo').click( (e) ->
                 show_infomodal($(this).data('id'))
             )
         )
+
+    onLocationFound = (e) ->
+        console.log "yay"
+        radius = e.accuracy / 2;
+        L.marker(e.latlng).addTo(map)
+            .bindPopup("You are within " + radius + " meters from this point").openPopup()
+        L.circle(e.latlng, radius).addTo(map)
+
 
     show_infomodal = (sid) ->
         path = '/api/site/'+sid+'.json'
@@ -117,8 +126,6 @@ $.fn.sites = (opts = {}) ->
             icon = icon_default
             if elem.data('sidewalk_only') == 'True'
                 icon = icon_sidewalk
-
-            console.log(elem.data('sidewalk_only'))
 
             marker = L.marker([lat, lng], {icon: icon}).addTo(map)
             markers[elem.data('id')] = marker

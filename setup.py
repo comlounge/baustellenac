@@ -31,5 +31,8 @@ setup(name='baustellenac',
       entry_points="""
       [paste.app_factory]
       main = baustellenac.app:app
+      [console_scripts]
+      import_baustellen = baustellenac.scripts.import_data:import_data
+
       """,
       )

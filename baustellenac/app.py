@@ -66,6 +66,8 @@ class BaustellenApp(Application):
         'mongodb_host'          : "localhost",
         'secret_key'            : "c987sd9cs7c98d7d&%$%&hhhs8c7zcbs87ct 987csd987csd9877stc 8c7cs8 78 7dts 8cs97tugjgjzGUZGUzgcdcg&%%$",
         'session_cookie_domain' : "dev.localhost",
+        'tileurl'               : '',
+        'gacode'                : '',
     }
 
     betreiber = {
