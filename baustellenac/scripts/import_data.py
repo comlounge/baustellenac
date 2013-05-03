@@ -1,6 +1,7 @@
 #coding: utf-8
 
 import re
+import time
 import csv
 import datetime
 import requests
@@ -140,6 +141,7 @@ class ImportData(ScriptBase):
             if len(data['results'][0]['formatted_address'].split(',')) == 2:
                 exact = False
             return (data['results'][0]['geometry']['location'], exact)
+        time.sleep(3)
         return (None, None)
 
     def get_osm_latlng(self, street, number=None):
