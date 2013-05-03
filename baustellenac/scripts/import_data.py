@@ -140,7 +140,7 @@ class ImportData(ScriptBase):
             if len(data['results'][0]['formatted_address'].split(',')) == 2:
                 exact = False
             return (data['results'][0]['geometry']['location'], exact)
-        return None
+        return (None, None)
 
     def get_osm_latlng(self, street, number=None):
         url = osm_url %(street, number)
