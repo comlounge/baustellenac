@@ -32,7 +32,6 @@ class SectionSchema(Schema):
     start_lng = Float()
     end_lat = Float()
     end_lng = Float()
-    exact_position = Boolean()
 
 class SiteSchema(Schema):
     """main schema for a street construction site"""
@@ -54,6 +53,9 @@ class SiteSchema(Schema):
 
     # this field describes an approx. time frame in plain text
     approx_timeframe    = String()
+
+    # shows if we have exact lat/lng
+    exact_position = Boolean()
 
     sections            = List(SectionSchema()) # list of sections/streets. Only one if it's only one location
 

@@ -38,9 +38,10 @@ class ImportData(ScriptBase):
                     if d['Ende genau'].strip():
                         site_data['end_date'] = datetime.datetime.strptime(d['Ende genau'], '%d.%m.%Y')
 
-                    sections = self.get_sections(d)
+                    sections, exact_position = self.get_sections(d)
                     if len(sections) > 0:
-                        site_data['sections'] = self.get_sections(d)
+                        site_data['sections'] = sections
+                        site_data['exact_position'] = exact_position
                         site = Site(site_data)
                         del site['_id']
                         self.app.config.dbs.baustellen.save(site)
@@ -49,6 +50,7 @@ class ImportData(ScriptBase):
     def get_sections(self, d):
         sections = []
         streets_string = d['Strassen']
+        exact_position = True
 
         # check for sub_streets (intersections)
         sub_streets = []
@@ -78,7 +80,6 @@ class ImportData(ScriptBase):
             if start_latlng is not None:
                 section['start_lat'] = start_latlng['lat']
                 section['start_lng'] = start_latlng['lng']
-                section['exact_position'] = exact_position
             sections.append(section)
 
         else:
@@ -109,18 +110,16 @@ class ImportData(ScriptBase):
                 if start_latlng is not None:
                     section['start_lat'] = start_latlng['lat']
                     section['start_lng'] = start_latlng['lng']
-                    section['exact_position'] = exact_position
                 if len(s['number']) > 1:
                     section['end_number'] = s['number'][1]
                     end_latlng, exact_position = self.get_gm_latlng(s['name'], s['number'][1])
                     if end_latlng is not None:
                         section['end_lat'] = end_latlng['lat']
                         section['end_lng'] = end_latlng['lng']
-                        section['exact_position'] = exact_position
 
                 sections.append(section)
 
-        return sections
+        return (sections, exact_position)
 
         #for s in d['Strassen'].split(','):
         #

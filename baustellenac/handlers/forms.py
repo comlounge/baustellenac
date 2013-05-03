@@ -1,5 +1,5 @@
 #encoding=utf8
-import json 
+import json
 import decimal
 
 from .. import BaseForm
@@ -7,7 +7,7 @@ from .. import BaseForm
 from wtforms import TextField, PasswordField, FieldList, BooleanField, IntegerField, DecimalField
 from wtforms import SelectField, DateField, TextAreaField, HiddenField, FloatField, Field, FormField, Form
 from wtforms import validators as v
-from wtforms.widgets import html_params, HTMLString
+from wtforms.widgets import html_params, HTMLString, TextInput
 from jinja2 import Template
 
 ###
@@ -37,7 +37,7 @@ def checkbox_button(field, **kwargs):
         button_params['class'] = "btn btn-toggle"
     if "class" in kwargs:
         button_params['class'] = button_params['class'] + " " + kwargs['class']
-        
+
     html = [
         u'<input %s />' %html_params(**hidden_params),
         u'<button %s >' %html_params(**button_params)
@@ -53,7 +53,7 @@ def checkbox_button(field, **kwargs):
 
 class BooleanValueField(Field):
     """
-    Represents an checkbox button 
+    Represents an checkbox button
     """
     widget = checkbox_button
 
@@ -91,3 +91,23 @@ class JSONField(Field):
             self.data = u""
 
 
+class DatePickerWidget(TextInput):
+
+    def __call__(self, field, **kwargs):
+        c = kwargs.pop('class', '') or kwargs.pop('class_', '')
+        kwargs['class'] = u'date-picker %s' % c
+        return super(DatePickerWidget, self).__call__(field, **kwargs)
+
+
+class SiteForm(BaseForm):
+    """a client form"""
+
+    name = TextField(u"Name", default="")
+    subtitle = TextField(u"zusätzl. Titel", default="")
+    description = TextField(u"Beschreibung", default="")
+    organisation = TextField(u"Träger", default="")
+    sidewalk_only = BooleanField(u"Nur auf dem Gehweg?")
+    name = TextField(u"Name", default="")
+    start_date = DateField(u"Start", format='%d.%m.%Y', widget=DatePickerWidget()) # start date of project
+    end_date = DateField(u"Ende", format='%d.%m.%Y', widget=DatePickerWidget()) # approx. end date of project
+    approx_timeframe = TextField(u"ungefährer Zeitraum", default="")
