@@ -30,14 +30,21 @@
     <body data-tileurl="{{config.tileurl}}">
         {% block container %}
         <div class="container-fluid wrapper" id="content">
-            <header><h4>Baustellen in Aachen</h4></header>
+            <header><h3 style="margin-top: 1px;">Baustellen in Aachen
+            <small>Preview-Version. Baustellen-Platzierung noch nicht 100% richtig.
+            <a href="http://aachen.de/baustellen">Originaldaten gibt es hier</a>
+            </small>
+            </h3> 
+            </header>
             {% block content %}
             {% block main_content %}
             {% endblock %}
             {% endblock %}
             <footer>
                     <div class="pull-right">Ein Projekt der <a href="http://comlounge.net">COM.lounge GmbH</a> mit <a href="http://aachen.de/baustellen">Daten der Stadt Aachen</a></div>
-                    <a href="/impressum.html">Impressum</a>
+                    <a href="/impressum.html">Impressum</a> |
+                    <a href="http://blog.comlounge.net/news/baustellen-in-aachen/">Blogpost über das Projekt</a> 
+
                 </div>
             </footer>
         </div> <!-- /container -->
