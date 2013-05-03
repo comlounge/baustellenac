@@ -31,16 +31,21 @@
     <body data-tileurl="{{config.tileurl}}">
         {% block container %}
         <div class="container-fluid wrapper" id="content">
-            <header><h4>Baustellen Aachen</h4></header>
+            <header><h3 style="margin-top: 1px;">Baustellen in Aachen
+            <small>Preview-Version. Baustellen-Platzierung noch nicht 100% richtig.
+            <a href="http://aachen.de/baustellen">Originaldaten gibt es hier</a>
+            </small>
+            </h3> 
+            </header>
             {% block content %}
             {% block main_content %}
             {% endblock %}
             {% endblock %}
             <footer>
-                <div>
-                    <a href="/impressum.html">Impressum</a>
-                    <a href="/sites">Bearbeiten</a>
-                    <a href="/api/sites.json">Export</a>
+                    <div class="pull-right">Ein Projekt der <a href="http://comlounge.net">COM.lounge GmbH</a> mit <a href="http://aachen.de/baustellen">Daten der Stadt Aachen</a></div>
+                    <a href="/impressum.html">Impressum</a> |
+                    <a href="http://blog.comlounge.net/news/baustellen-in-aachen/">Blogpost über das Projekt</a> 
+
                 </div>
             </footer>
         </div> <!-- /container -->
@@ -68,7 +73,7 @@
   
 
 </script>
-
+        
 
         <script src="{{url_for("static", filename="js/bootstrap-modal.js")}}"></script>
         <script src="{{url_for("static", filename="js/jquery.ui.min.js")}}"></script>
@@ -79,6 +84,7 @@
             <script src="{{url_for("static", filename="js/bootstrap-transition.js")}}"></script>
             <script src="{{url_for("static", filename="js/bootstrap-button.js")}}"></script>
             <script src="{{url_for("static", filename="js/bootstrap-tab.js")}}"></script>
+            <script src="{{url_for("static", filename="js/bootstrap-tooltip.js")}}"></script>
             <script src="{{url_for("static", filename="js/bootstrap-alert.js")}}"></script>
             <script src="{{url_for("static", filename="js/bootstrap-popover.js")}}"></script>
             <script src="{{url_for("static", filename="js/forms.js")}}"></script>
