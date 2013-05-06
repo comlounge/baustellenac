@@ -12,7 +12,7 @@ class IndexView(BaseHandler):
     def get(self):
         """render the view"""
         return self.render(
-            sites = self.config.dbs.baustellen.find(),
+            sites = self.config.dbs.baustellen.find().sort("name", 1),
         )
     post = get
 
