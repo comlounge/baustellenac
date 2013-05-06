@@ -34,9 +34,13 @@ $.fn.sites = (opts = {}) ->
             make_marker($(this))
         )
 
-        $('.site').click(() ->
+        $('.site').mouseover(() ->
             markers[$(this).data('id')].openPopup()
         )
+        $('.site').click(() ->
+            show_infomodal($(this).data('id'))
+        )
+
         map.locate({setView: true, maxZoom: 2})
         map.on('locationfound', onLocationFound)
 
