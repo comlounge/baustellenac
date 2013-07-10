@@ -1,0 +1,77 @@
+{% extends "master.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+{% endblock %}
+
+{% block content %}
+    <div id="mapmodal" class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Modal header</h3>
+        </div>
+        <div class="modal-body">
+
+        </div>
+        <div class="modal-footer">
+            <a href="#" data-dismiss="modal" class="btn">Schließen</a>
+        </div>
+    </div>
+
+    {% block site_header %}
+        <h3>Neue Baustelle anlegen</h3>
+    {% endblock %}
+
+    <form method="POST" action="{{url}}" id="client-form" class="form-horizontal validate">
+        <fieldset>
+            <!--legend>Kerndaten</legend-->
+            {{ macros.form_field(form.name, class="required large span6") }}
+            {{ macros.form_field(form.subtitle, class="required span6") }}
+            {{ macros.form_field(form.description, class="required span6") }}
+            {{ macros.form_field(form.organisation, class="required span6") }}
+            {{ macros.form_field(form.sidewalk_only, class="span3") }}
+            {{ macros.form_field(form.start_date, class="span2") }}
+            {{ macros.form_field(form.end_date, class="span2") }}
+            {{ macros.form_field(form.approx_timeframe, class="span6") }}
+        </fieldset>
+        <fieldset>
+            <!--legend>Geodaten</legend-->
+            <div class="control-group " id="field-latlng">
+                <label class="control-label" for="latlng">Geodaten</label>
+                <div class="controls" id="latlng-div">
+                    <div class="input  ">
+                        <a href="#" class="btn showmap">Karte</a>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="form-actions">
+                <input type="submit" class="btn btn-primary" value="Speichern">
+                <a href="{{url_for('sites')}}" class="btn">Abbrechen</a>
+            </div>
+        </fieldset>
+    </form>
+
+    <div class="row">
+
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.noposition').tooltip();
+
+            $(".date-picker").datepicker({
+                constrainInput: true,
+                dateFormat: "dd.mm.yy",
+            });
+
+            $('.showmap').click(function(){
+                $('#mapmodal').modal('show');
+            });
+        });
+    </script>
+{% endblock %}

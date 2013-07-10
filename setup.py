@@ -26,6 +26,7 @@ setup(name='baustellenac',
         "pymongo",
         "wtforms",
         "mongogogo",
+        "userbase",
         "setuptools",
       ],
       entry_points="""
