@@ -19,6 +19,24 @@ class SitesView(BaseHandler):
         )
     post = get
 
+class SiteAddView(BaseHandler):
+    """shows and processes the site edit form"""
+
+    template = "site_add.html"
+
+    def get(self):
+        """render the view"""
+        form = SiteForm(self.request.form)
+        if self.request.method == 'POST' and form.validate():
+            f = form.data
+            site.update(f)
+            self.config.dbs.baustellen.put(site)
+            self.flash(self._(u"Baustellen %s aktualisiert" %site.name), category="info")
+            return redirect(self.url_for("sites"))
+        return self.render(
+            form = form
+        )
+    post = get
 
 class SiteEditView(BaseHandler):
     """shows and processes the site edit form"""
