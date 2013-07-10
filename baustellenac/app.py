@@ -4,6 +4,7 @@ import pymongo
 import pkg_resources
 
 from starflyer import Application, URL, AttributeMapper
+import userbase
 
 import re
 from jinja2 import evalcontextfilter, Markup, escape
@@ -78,6 +79,23 @@ class BaustellenApp(Application):
     }
 
     modules = [
+        userbase.email_userbase(
+            url_prefix                  = "/users",
+            mongodb_name                = "baustellenac",
+            master_template             = "master.html",
+            login_after_registration    = False,
+            double_opt_in               = True,
+            enable_registration         = True,
+            use_html_mail               = False,
+            urls                        = {
+                'activation'            : {'endpoint' : 'userbase.activate'},
+                'activation_success'    : {'endpoint' : 'admin_overview'},
+                'activation_code_sent'  : {'endpoint' : 'userbase.activate'},
+                'login_success'         : {'endpoint' : 'admin_overview'},
+                'logout_success'        : {'endpoint' : 'userbase.login'},
+                'registration_success'  : {'endpoint' : 'userbase.login'},
+            },
+        ),
     ]
 
     jinja_filters = {
@@ -89,7 +107,11 @@ class BaustellenApp(Application):
         URL('/', 'index', handlers.index.IndexView),
         URL('/impressum.html', 'impressum', handlers.index.Impressum),
         URL('/sites', 'sites', handlers.sites.SitesView),
+        URL('/site/add', 'site_add', handlers.sites.SiteAddView),
         URL('/site/<site_id>/edit', 'site_edit', handlers.sites.SiteEditView),
+
+        # admin
+        URL('/admin', 'admin_overview', handlers.admin.Overview),
 
         # api
         URL('/api/sites.json', 'api_all_sites', handlers.api.AllSites),
