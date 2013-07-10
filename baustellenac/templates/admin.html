@@ -1,0 +1,41 @@
+{% extends "master.html" %}
+
+{% block content %}
+
+    <div class="row-fluid columns content">
+        <h2>Administrator - &Uuml;bersicht</h2>
+
+        <div class="row">
+            <div class="pull-right">
+                <a href="{{url_for('site_add')}}" class="right btn btn-primary"><i class="icon icon-white icon-plus"></i> Neue Baustelle anlegen</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span1">&nbsp;</div>
+            <div class="span6">
+                <table class="table table-striped">
+                    {% for site in sites %}
+                        <tr>
+                            <td class="span4">
+                                {{site.name}} <span class="muted">({{site.approx_timeframe}})</span>
+                            </td>
+                            <td class="span1">
+                                {% if not site.exact_position %}
+                                    <i data-title="Keine exakten Geodaten!" class="noposition icon-exclamation-sign"></i>
+                                {% endif %}
+                            </td>
+                            <td class="span2">
+                                <a href="{{url_for('site_edit', site_id=site._id)}}" class="btn btn-mini"><i class="icon-edit"></i> bearbeiten</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
+    <script src="{{url_for("static", filename="js/sites.js")}}"></script>
+{% endblock %}
