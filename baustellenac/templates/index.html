@@ -1,4 +1,4 @@
-{% extends "master.html" %}
+{% extends "master_map.html" %}
 
 {% block head %}
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
@@ -43,11 +43,7 @@
                                 data-sidewalk_only="{{site.sidewalk_only}}"
                                 data-approx_timeframe="{{site.approx_timeframe}}"
                                 data-start_date="{{site.start_date}}"
-                                data-end_date="{{site.end_date}}"
-                                data-start_lat="{{site.sections[0].start_lat}}"
-                                data-start_lng="{{site.sections[0].start_lng}}"
-                                data-end_lat="{{site.sections[0].end_lat}}"
-                                data-end_lng="{{site.sections[0].end_lng}}">
+                                data-end_date="{{site.end_date}}">
                                 {{site.name}}
                                 <span class="muted">({{site.approx_timeframe}})</span>
                             </td>

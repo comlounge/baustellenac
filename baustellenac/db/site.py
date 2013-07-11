@@ -54,6 +54,10 @@ class SiteSchema(Schema):
     # this field describes an approx. time frame in plain text
     approx_timeframe    = String()
 
+    # where the icon is positioned
+    lat                 = String()
+    lng                 = String()
+
     # shows if we have exact lat/lng
     exact_position = Boolean()
 
@@ -62,44 +66,7 @@ class SiteSchema(Schema):
 class Site(Record):
 
     schema = SiteSchema()
-    _protected = ['schema', 'collection', '_protected', '_schemaless', 'default_values', 'workflow_states', 'initial_workflow_state']
-    initial_workflow_state = "created"
-    default_values = {
-        'created'       : datetime.datetime.utcnow,
-        'updated'       : datetime.datetime.utcnow,
-    }
 
-    workflow_states = {
-        'created'       : ['public'],
-        'public'        : ['created'],
-    }
-
-    def set_workflow(self, new_state):
-        """set the workflow to a new state"""
-        old_state = self.workflow
-        if old_state is None:
-            old_state = self.initial_workflow_state
-        allowed_states = self.workflow_states[old_state]
-
-        # check if transition is allowed
-        if hasattr(self, "check_wf_"+new_state):
-            m = getattr(self, "check_wf_"+new_state)
-            if not m(old_state = old_state): # this should raise WorkflowError if not allowed otherwise return True
-                raise WorkflowError(old_state = old_state, new_state = new_state) # fallback
-
-        if new_state not in allowed_states:
-            raise WorkflowError(old_state = old_state, new_state = new_state)
-
-        # Trigger
-        if hasattr(self, "on_wf_"+new_state):
-            m = getattr(self, "on_wf_"+new_state)
-            m(old_state = old_state)
-        self.workflow = new_state
-
-    @property
-    def public(self):
-        """return whether the barcamp is public or not"""
-        return self.workflow in ['public']
 
 class Sites(Collection):
 

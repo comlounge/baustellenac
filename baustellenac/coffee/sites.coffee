@@ -3,7 +3,10 @@ $.fn.sites = (opts = {}) ->
 
     map_zoom = 13
     max_zoom = 18
-    map = L.map('map').setView([50.7753455, 6.0838868], map_zoom)
+    map = L.map('map',
+        center: [50.7753455, 6.0838868]
+        zoom: map_zoom
+    )
     markers = {}
     icon_default = L.icon(
         iconUrl: '/static/img/Under_construction_icon-red.svg',

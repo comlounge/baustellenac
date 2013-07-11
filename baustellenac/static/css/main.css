@@ -2361,7 +2361,7 @@ table th[class*="span"],
 .open {
   *z-index: 1000;
 }
-.open  > .dropdown-menu {
+.open > .dropdown-menu {
   display: block;
 }
 .pull-right > .dropdown-menu {
@@ -4991,9 +4991,19 @@ html,
 body {
   height: 100%;
 }
+.mapcontainer {
+  height: 400px;
+}
+.staticmapcontainer {
+  height: 200px;
+  width: 300px;
+  margin-right: 10px;
+}
 #map {
   height: 100%;
-  border-right: 1px solid #a0a0a0;
+}
+#staticmap {
+  height: 100%;
 }
 .site {
   cursor: pointer;
