@@ -1,10 +1,12 @@
 #encoding=utf8
 
 import pymongo
+import uuid
 
 from starflyer import asjson, redirect
 from .. import BaseHandler
 from forms import SiteForm
+from baustellenac import db
 
 
 class SitesView(BaseHandler):
@@ -26,17 +28,26 @@ class SiteAddView(BaseHandler):
 
     def get(self):
         """render the view"""
-        form = SiteForm(self.request.form)
-        if self.request.method == 'POST' and form.validate():
-            f = form.data
-            site.update(f)
-            self.config.dbs.baustellen.put(site)
-            self.flash(self._(u"Baustellen %s aktualisiert" %site.name), category="info")
-            return redirect(self.url_for("sites"))
+        form = SiteForm()
         return self.render(
             form = form
         )
-    post = get
+
+    def post(self):
+        """save site"""
+        form = SiteForm(self.request.form)
+        if form.validate():
+            f = form.data
+            site_data = {}
+            site_data.update(f)
+            site = db.Site(site_data)
+            del site['_id']
+            self.config.dbs.baustellen.put(site)
+            self.flash(self._(u"Baustellen %s erfolgreich angelegt" %site.name), category="info")
+            return redirect(self.url_for("admin_overview"))
+        return self.render(
+            form = form
+        )
 
 class SiteEditView(BaseHandler):
     """shows and processes the site edit form"""

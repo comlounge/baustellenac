@@ -1,0 +1,98 @@
+{% import "macros.html" as macros with context %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{{title}}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- Le styles -->
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600,700,800' rel='stylesheet' type='text/css'>
+
+        {% block css %}
+        <link href="{{url_for("static", filename="css/main.css")}}" rel="stylesheet">
+        <link rel="shortcut icon" href="{{url_for("static", filename="img/favicon.ico")}}" type="image/x-icon">
+        <link rel="icon" href="{{url_for("static", filename="img/favicon.ico")}}" type="image/x-icon">
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+
+        {% endblock %}
+        {% block head %}
+        {% endblock %}
+
+    </head>
+
+    <body data-tileurl="{{config.tileurl}}">
+        {% block container %}
+        <div class="container-fluid wrapper" id="content">
+            <header><h3 style="margin-top: 1px;">Baustellen in Aachen
+            <small>Preview-Version. Baustellen-Platzierung noch nicht 100% richtig.
+            <a href="http://aachen.de/baustellen">Originaldaten gibt es hier</a>
+            </small>
+            </h3> 
+            </header>
+            {% block content %}
+            {% block main_content %}
+            {% endblock %}
+            {% endblock %}
+            <footer>
+                    <div class="pull-right">Ein Projekt der <a href="http://comlounge.net">COM.lounge GmbH</a> mit <a href="http://aachen.de/baustellen">Daten der Stadt Aachen</a></div>
+                    <a href="/impressum.html">Impressum</a> |
+                    <a href="http://blog.comlounge.net/news/baustellen-in-aachen/">Blogpost über das Projekt</a> 
+
+                </div>
+            </footer>
+        </div> <!-- /container -->
+        {% endblock %}
+
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="{{url_for("static", filename="js/jquery.min.js")}}"></script>
+        <script src="{{url_for("static", filename="js/jquery.ui.datepicker-de.js")}}"></script>
+
+        {% block js %}
+        {% endblock %}
+        {% block js2 %}
+        {% endblock %}
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', '{{config.gacode}}', 'offenes-aachen.de');
+  ga('set', 'anonymizeIp', true);
+  ga('send', 'pageview');
+  
+
+</script>
+        
+
+        <script src="{{url_for("static", filename="js/bootstrap-modal.js")}}"></script>
+        <script src="{{url_for("static", filename="js/jquery.ui.min.js")}}"></script>
+        <script src="{{url_for("static", filename="js/bootstrap-tooltip.js")}}"></script>
+
+        {#
+            <script src="{{url_for("static", filename="js/bootstrap-dropdown.js")}}"></script>
+            <script src="{{url_for("static", filename="js/bootstrap-transition.js")}}"></script>
+            <script src="{{url_for("static", filename="js/bootstrap-button.js")}}"></script>
+            <script src="{{url_for("static", filename="js/bootstrap-tab.js")}}"></script>
+            <script src="{{url_for("static", filename="js/bootstrap-tooltip.js")}}"></script>
+            <script src="{{url_for("static", filename="js/bootstrap-alert.js")}}"></script>
+            <script src="{{url_for("static", filename="js/bootstrap-popover.js")}}"></script>
+            <script src="{{url_for("static", filename="js/forms.js")}}"></script>
+            <script src="/static/js/bootstrap-alert.js"></script>
+            <script src="/static/js/bootstrap-scrollspy.js"></script>
+            <script src="/static/js/bootstrap-collapse.js"></script>
+            <script src="/static/js/bootstrap-carousel.js"></script>
+            <script src="/static/js/bootstrap-typeahead.js"></script>
+        #}
+    </body>
+</html>

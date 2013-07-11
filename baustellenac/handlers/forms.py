@@ -111,3 +111,5 @@ class SiteForm(BaseForm):
     start_date = DateField(u"Start", format='%d.%m.%Y', widget=DatePickerWidget()) # start date of project
     end_date = DateField(u"Ende", format='%d.%m.%Y', widget=DatePickerWidget()) # approx. end date of project
     approx_timeframe = TextField(u"ungefährer Zeitraum", default="")
+    lat = HiddenField(default='')
+    lng = HiddenField(default='')
