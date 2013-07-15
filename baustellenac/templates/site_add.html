@@ -20,14 +20,14 @@
         </div>
     </div>
 
-
-    <h3>neue Baustelle anlegen</h3>
+    {% block site_header %}
+        <h3>neue Baustelle anlegen</h3>
+    {% endblock %}
     <div class="row">
 
-        <form method="POST" action="{{url}}" id="site-form" class="form-horizontal validate"
-              data-lat="{{site.lat}}"
-              data-lng="{{site.lng}}"
-              data-sidewalk_only="{{site.sidewalk_only}}">
+        <form method="POST" action="{{url}}" id="site-form" class="form-horizontal validate">
+            {% block site_config %}
+            {% endblock %}
             <fieldset>
                 <!--legend>Kerndaten</legend-->
                 {{ macros.form_field(form.lat) }}

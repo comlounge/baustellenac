@@ -47,8 +47,8 @@ $.fn.sites = function(opts) {
   };
   init_edit_map = function() {
     var lat, lng;
-    lat = $('#site-form').data('lat');
-    lng = $('#site-form').data('lng');
+    lat = $('#siteconfig').data('lat');
+    lng = $('#siteconfig').data('lng');
     if (lat === '' || lng === '') {
       lat = default_lat;
       lng = default_lng;
@@ -73,8 +73,8 @@ $.fn.sites = function(opts) {
   };
   init_static_map = function() {
     var lat, lng;
-    lat = $('#site-form').data('lat');
-    lng = $('#site-form').data('lng');
+    lat = $('#siteconfig').data('lat');
+    lng = $('#siteconfig').data('lng');
     if (lat === '' || lng === '') {
       lat = default_lat;
       lng = default_lng;

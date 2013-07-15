@@ -3,3 +3,10 @@
 {% block site_header %}
     <h3>{{site.name}} bearbeiten</h3>
 {% endblock %}
+
+{% block site_config %}
+    <div id="siteconfig"
+         data-lat="{{site.lat}}"
+         data-lng="{{site.lng}}"
+         data-sidewalk_only="{{site.sidewalk_only}}"></div>
+{% endblock %}
