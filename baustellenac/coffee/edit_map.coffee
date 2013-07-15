@@ -45,8 +45,8 @@ $.fn.sites = (opts = {}) ->
             icon = icon_default
 
     init_edit_map = ()->
-        lat = $('#site-form').data('lat')
-        lng = $('#site-form').data('lng')
+        lat = $('#siteconfig').data('lat')
+        lng = $('#siteconfig').data('lng')
         if lat == '' or lng == ''
             lat = default_lat
             lng = default_lng
@@ -68,8 +68,8 @@ $.fn.sites = (opts = {}) ->
             map.addLayer(marker)
 
     init_static_map = ()->
-        lat = $('#site-form').data('lat')
-        lng = $('#site-form').data('lng')
+        lat = $('#siteconfig').data('lat')
+        lng = $('#siteconfig').data('lng')
         if lat == '' or lng == ''
             lat = default_lat
             lng = default_lng
