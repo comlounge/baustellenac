@@ -58,7 +58,7 @@ $.fn.sites = function(opts) {
     }
   };
   init_edit_map = function() {
-    var lat, lng, pl;
+    var lat, lng, pl, pl_data;
     lat = $('#siteconfig').data('lat');
     lng = $('#siteconfig').data('lng');
     if (!(lat != null) || !(lng != null) || lat === '' || lng === '') {
@@ -87,10 +87,15 @@ $.fn.sites = function(opts) {
       }
     }
     if (mode === 'route') {
-      pl = L.polyline(JSON.parse($('#polyline').val()), {
-        clickable: true
-      });
-      drawnItems = new L.FeatureGroup([pl]);
+      pl_data = $('#polyline').val();
+      if (pl_data) {
+        pl = L.polyline(JSON.parse($('#polyline').val()), {
+          clickable: true
+        });
+        drawnItems = new L.FeatureGroup([pl]);
+      } else {
+        drawnItems = new L.FeatureGroup();
+      }
       map.addLayer(drawnItems);
       drawControl = new L.Control.Draw({
         position: 'topleft',

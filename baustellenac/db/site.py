@@ -63,7 +63,7 @@ class SiteSchema(Schema):
     lng                 = String()
 
     # the drawable line
-    polyline            = List(LatLngSchema())
+    polyline            = List(LatLngSchema(), required = False)
 
     # shows if we have exact lat/lng
     exact_position = Boolean()
