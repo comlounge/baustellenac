@@ -11,6 +11,12 @@ class AddUsers(ScriptBase):
             'fullname' : 'Carsten Rebbien',
             'password' : 'admin'
         }, force = True, create_pw = False)
+        self.app.module_map['userbase'].register({
+            'email' : 'cs@comlounge.net',
+            'fullname' : 'Christian Scholz',
+            'password' : 'admin'
+        }, force = True, create_pw = False)
+
 
 
 def addusers():
