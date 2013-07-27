@@ -7,7 +7,7 @@ from .. import BaseForm
 from wtforms import TextField, PasswordField, FieldList, BooleanField, IntegerField, DecimalField
 from wtforms import SelectField, DateField, TextAreaField, HiddenField, FloatField, Field, FormField, Form
 from wtforms import validators as v
-from wtforms.widgets import html_params, HTMLString, TextInput
+from wtforms.widgets import html_params, HTMLString, TextInput, HiddenInput
 from jinja2 import Template
 
 ###
@@ -113,3 +113,4 @@ class SiteForm(BaseForm):
     approx_timeframe = TextField(u"ungefährer Zeitraum", default="")
     lat = HiddenField(default='')
     lng = HiddenField(default='')
+    polyline = JSONField(u'Polyline', widget=HiddenInput())
