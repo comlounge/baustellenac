@@ -57,7 +57,7 @@ $.fn.sites = (opts = {}) ->
     init_edit_map = ()->
         lat = $('#siteconfig').data('lat')
         lng = $('#siteconfig').data('lng')
-        if lat == '' or lng == ''
+        if not lat? or not lng? or lat == '' or lng == ''
             lat = default_lat
             lng = default_lng
         if not map
@@ -110,7 +110,9 @@ $.fn.sites = (opts = {}) ->
     init_static_map = ()->
         lat = $('#siteconfig').data('lat')
         lng = $('#siteconfig').data('lng')
-        if lat == '' or lng == ''
+        console.log(lat?)
+        console.log(lng?)
+        if not lat? or not lng? or lat == '' or lng == ''
             lat = default_lat
             lng = default_lng
         staticmap = L.map('staticmap',
