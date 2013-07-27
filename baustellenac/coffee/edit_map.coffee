@@ -79,10 +79,14 @@ $.fn.sites = (opts = {}) ->
                 marker.on('dragend', set_marker_latlng_to_form)
                 map.addLayer(marker)
         if mode=='route'
-            pl = L.polyline(JSON.parse($('#polyline').val()),
-                clickable: true
-            )
-            drawnItems = new L.FeatureGroup([pl])
+            pl_data = $('#polyline').val()
+            if pl_data
+                pl = L.polyline(JSON.parse($('#polyline').val()),
+                    clickable: true
+                )
+                drawnItems = new L.FeatureGroup([pl])
+            else
+                drawnItems = new L.FeatureGroup()
             map.addLayer(drawnItems)
             # Initialize the draw control and pass it the FeatureGroup of editable layers
             drawControl = new L.Control.Draw(
