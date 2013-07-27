@@ -1,6 +1,7 @@
 
 $.fn.sites = (opts = {}) ->
 
+    mode = 'marker' # or 'route'
     map_zoom = 15
     max_zoom = 18
     default_lat = 50.7753455
@@ -9,6 +10,8 @@ $.fn.sites = (opts = {}) ->
     staticmap = null
     marker = null
     smarker = null
+    drawControl = null
+    drawnItems = null
 
     icon_default = L.icon(
         iconUrl: '/static/img/Under_construction_icon-red.svg',
@@ -34,8 +37,15 @@ $.fn.sites = (opts = {}) ->
         init_icon()
         init_static_map()
         $('.showmap').click( ()->
+            mode = $(this).attr('id').replace('set','')
             $('#mapmodal').modal('show')
             init_edit_map()
+        )
+        $('#mapmodal').on('hidden', () ->
+            if marker != null
+                map.removeLayer(marker)
+            if drawControl != null
+                map.removeControl(drawControl)
         )
 
     init_icon = () ->
@@ -50,22 +60,52 @@ $.fn.sites = (opts = {}) ->
         if lat == '' or lng == ''
             lat = default_lat
             lng = default_lng
-        map = L.map('map',
-            center: [lat, lng]
-            zoom: map_zoom
-        )
-        L.tileLayer(map_url, {
-            attribution: map_attribution,
-            maxZoom: max_zoom
-        }).addTo(map)
-        map.on('click', set_marker);
-        if lat != default_lat
-            marker = L.marker([lat, lng],
-                draggable:true
-                icon:icon
+        if not map
+            map = L.map('map',
+                center: [lat, lng]
+                zoom: map_zoom
             )
-            marker.on('dragend', set_marker_latlng_to_form)
-            map.addLayer(marker)
+            L.tileLayer(map_url, {
+                attribution: map_attribution,
+                maxZoom: max_zoom
+            }).addTo(map)
+        if mode=='marker'
+            map.on('click', set_marker);
+            if lat != default_lat
+                marker = L.marker([lat, lng],
+                    draggable:true
+                    icon:icon
+                )
+                marker.on('dragend', set_marker_latlng_to_form)
+                map.addLayer(marker)
+        if mode=='route'
+            pl = L.polyline(JSON.parse($('#polyline').val()),
+                clickable: true
+            )
+            drawnItems = new L.FeatureGroup([pl])
+            map.addLayer(drawnItems)
+            # Initialize the draw control and pass it the FeatureGroup of editable layers
+            drawControl = new L.Control.Draw(
+                position: 'topleft'
+                draw:
+                    polygon: false
+                    circle: false
+                    rectangle: false
+                    marker: false
+                edit:
+                    featureGroup: drawnItems
+                    edit: false
+            )
+            map.addControl(drawControl)
+            map.on('draw:created', (e) ->
+                type = e.layerType
+                layer = e.layer
+                if type == 'polyline'
+                    console.log(JSON.stringify(layer._latlngs))
+                    $('#polyline').val(JSON.stringify(layer._latlngs))
+                drawnItems.addLayer(layer)
+            )
+
 
     init_static_map = ()->
         lat = $('#siteconfig').data('lat')

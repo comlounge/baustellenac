@@ -33,6 +33,10 @@ class SectionSchema(Schema):
     end_lat = Float()
     end_lng = Float()
 
+class LatLngSchema(Schema):
+    lat = Float()
+    lng = Float()
+
 class SiteSchema(Schema):
     """main schema for a street construction site"""
 
@@ -57,6 +61,9 @@ class SiteSchema(Schema):
     # where the icon is positioned
     lat                 = String()
     lng                 = String()
+
+    # the drawable line
+    polyline            = List(LatLngSchema())
 
     # shows if we have exact lat/lng
     exact_position = Boolean()
