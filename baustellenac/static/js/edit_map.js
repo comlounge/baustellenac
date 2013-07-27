@@ -61,7 +61,7 @@ $.fn.sites = function(opts) {
     var lat, lng, pl;
     lat = $('#siteconfig').data('lat');
     lng = $('#siteconfig').data('lng');
-    if (lat === '' || lng === '') {
+    if (!(lat != null) || !(lng != null) || lat === '' || lng === '') {
       lat = default_lat;
       lng = default_lng;
     }
@@ -122,7 +122,9 @@ $.fn.sites = function(opts) {
     var lat, lng;
     lat = $('#siteconfig').data('lat');
     lng = $('#siteconfig').data('lng');
-    if (lat === '' || lng === '') {
+    console.log(lat != null);
+    console.log(lng != null);
+    if (!(lat != null) || !(lng != null) || lat === '' || lng === '') {
       lat = default_lat;
       lng = default_lng;
     }
