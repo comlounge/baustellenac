@@ -2,6 +2,7 @@
 
 import pymongo
 import uuid
+import json
 
 from starflyer import asjson, redirect
 from .. import BaseHandler
@@ -66,6 +67,7 @@ class SiteEditView(BaseHandler):
             return redirect(self.url_for("sites"))
         return self.render(
             site = site,
+            site_polyline = json.dumps(site.polyline),
             form = form
         )
     post = get

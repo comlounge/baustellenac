@@ -12,6 +12,7 @@ $.fn.sites = (opts = {}) ->
     smarker = null
     drawControl = null
     drawnItems = null
+    spolyline = null
 
     icon_default = L.icon(
         iconUrl: '/static/img/Under_construction_icon-red.svg',
@@ -42,10 +43,14 @@ $.fn.sites = (opts = {}) ->
             init_edit_map()
         )
         $('#mapmodal').on('hidden', () ->
-            if marker != null
-                map.removeLayer(marker)
-            if drawControl != null
-                map.removeControl(drawControl)
+            if mode == 'marker'
+                if marker != null
+                    map.removeLayer(marker)
+            if mode == 'route'
+                if drawControl?
+                    map.removeControl(drawControl)
+                if drawnItems?
+                    map.removeLayer(drawnItems)
         )
 
     init_icon = () ->
@@ -79,9 +84,9 @@ $.fn.sites = (opts = {}) ->
                 marker.on('dragend', set_marker_latlng_to_form)
                 map.addLayer(marker)
         if mode=='route'
-            pl_data = $('#polyline').val()
+            pl_data = $('#siteconfig').data('polyline')
             if pl_data
-                pl = L.polyline(JSON.parse($('#polyline').val()),
+                pl = L.polyline(pl_data,
                     clickable: true
                 )
                 drawnItems = new L.FeatureGroup([pl])
@@ -105,9 +110,9 @@ $.fn.sites = (opts = {}) ->
                 type = e.layerType
                 layer = e.layer
                 if type == 'polyline'
-                    console.log(JSON.stringify(layer._latlngs))
                     $('#polyline').val(JSON.stringify(layer._latlngs))
                 drawnItems.addLayer(layer)
+                set_static_polyline(layer._latlngs)
             )
 
 
@@ -154,6 +159,12 @@ $.fn.sites = (opts = {}) ->
         )
         staticmap.addLayer(smarker)
         staticmap.panTo(latlng)
+
+    set_static_polyline = (latlngs)->
+        if spolyline?
+            staticmap.removeLayer(spolyline)
+        spolyline = L.polyline(latlngs);
+        staticmap.addLayer(spolyline)
 
     set_marker_latlng_to_form = ()->
         lat = marker.getLatLng().lat
