@@ -1,7 +1,6 @@
 
 $.fn.sites = (opts = {}) ->
 
-    mode = 'marker' # or 'route'
     map_zoom = 15
     max_zoom = 18
     default_lat = 50.7753455
@@ -12,6 +11,7 @@ $.fn.sites = (opts = {}) ->
     smarker = null
     drawControl = null
     drawnItems = null
+    polyline = null
     spolyline = null
 
     icon_default = L.icon(
@@ -37,20 +37,16 @@ $.fn.sites = (opts = {}) ->
     init = () ->
         init_icon()
         init_static_map()
+        lat = $('#siteconfig').data('lat')
+        lng = $('#siteconfig').data('lng')
+        pl_latlngs = $('#siteconfig').data('polyline')
+        if not lat? or not lng? or lat == '' or lng == ''
+            lat = default_lat
+            lng = default_lng
         $('.showmap').click( ()->
-            mode = $(this).attr('id').replace('set','')
             $('#mapmodal').modal('show')
-            init_edit_map()
-        )
-        $('#mapmodal').on('hidden', () ->
-            if mode == 'marker'
-                if marker != null
-                    map.removeLayer(marker)
-            if mode == 'route'
-                if drawControl?
-                    map.removeControl(drawControl)
-                if drawnItems?
-                    map.removeLayer(drawnItems)
+            if not map
+                init_edit_map(lat,lng,pl_latlngs)
         )
 
     init_icon = () ->
@@ -59,68 +55,75 @@ $.fn.sites = (opts = {}) ->
         else
             icon = icon_default
 
-    init_edit_map = ()->
-        lat = $('#siteconfig').data('lat')
-        lng = $('#siteconfig').data('lng')
-        if not lat? or not lng? or lat == '' or lng == ''
-            lat = default_lat
-            lng = default_lng
-        if not map
-            map = L.map('map',
-                center: [lat, lng]
-                zoom: map_zoom
-            )
-            L.tileLayer(map_url, {
-                attribution: map_attribution,
-                maxZoom: max_zoom
-            }).addTo(map)
-        if mode=='marker'
-            map.on('click', set_marker);
-            if lat != default_lat
-                marker = L.marker([lat, lng],
-                    draggable:true
-                    icon:icon
-                )
-                marker.on('dragend', set_marker_latlng_to_form)
-                map.addLayer(marker)
-        if mode=='route'
-            pl_data = $('#siteconfig').data('polyline')
-            if pl_data
-                pl = L.polyline(pl_data,
-                    clickable: true
-                )
-                drawnItems = new L.FeatureGroup([pl])
-            else
-                drawnItems = new L.FeatureGroup()
-            map.addLayer(drawnItems)
-            # Initialize the draw control and pass it the FeatureGroup of editable layers
-            drawControl = new L.Control.Draw(
-                position: 'topleft'
-                draw:
-                    polygon: false
-                    circle: false
-                    rectangle: false
-                    marker: false
-                edit:
-                    featureGroup: drawnItems
-                    edit: false
-            )
-            map.addControl(drawControl)
-            map.on('draw:created', (e) ->
-                type = e.layerType
-                layer = e.layer
-                if type == 'polyline'
-                    $('#polyline').val(JSON.stringify(layer._latlngs))
-                drawnItems.addLayer(layer)
-                set_static_polyline(layer._latlngs)
-            )
+    init_edit_map = (lat,lng, pl_latlngs)->
+        map = L.map('map',
+            center: [lat, lng]
+            zoom: map_zoom
+        )
+        L.tileLayer(map_url, {
+            attribution: map_attribution,
+            maxZoom: max_zoom
+        }).addTo(map)
 
+        drawnItems = new L.FeatureGroup()
+        # set marker if found
+        if lat != default_lat and lng != default_lng
+            marker = L.marker([lat,lng],
+                draggable:false
+                clickable:false
+                icon:icon
+            )
+            drawnItems.addLayer(marker)
+        # draw polyline if found
+        if pl_latlngs
+            polyline = L.polyline(pl_latlngs,
+                clickable: true
+            )
+            drawnItems.addLayer(polyline)
+
+        map.addLayer(drawnItems)
+        # Initialize the draw control and pass it the FeatureGroup of editable layers
+        drawControl = new L.Control.Draw(
+            position: 'topleft'
+            draw:
+                marker: {
+                    icon: icon
+                }
+                polygon: false
+                circle: false
+                rectangle: false
+            edit:
+                featureGroup: drawnItems
+                edit: false
+        )
+        map.addControl(drawControl)
+        map.on('draw:created', (e) ->
+            type = e.layerType
+            layer = e.layer
+            if type == 'marker'
+                drawnItems.removeLayer(marker)
+                marker = layer
+                # set marker form data
+                set_marker_latlng_to_form()
+                # set marker on static map
+                set_static_marker([marker.getLatLng().lat, marker.getLatLng().lng])
+            if type == 'polyline'
+                drawnItems.removeLayer(polyline)
+                polyline = layer
+                # set polyline form data
+                $('#polyline').val(JSON.stringify(polyline._latlngs))
+                # set polyline on static map
+                set_static_polyline(polyline._latlngs)
+            drawnItems.addLayer(layer)
+        )
 
     init_static_map = ()->
         lat = $('#siteconfig').data('lat')
         lng = $('#siteconfig').data('lng')
-        console.log(lat?)
-        console.log(lng?)
+        platlngs = $('#siteconfig').data('polyline')
+        console.log(lat)
+        console.log(lng)
+        console.log(poloyline?)
         if not lat? or not lng? or lat == '' or lng == ''
             lat = default_lat
             lng = default_lng
@@ -137,17 +140,8 @@ $.fn.sites = (opts = {}) ->
         }).addTo(staticmap)
         if lat != default_lat
             set_static_marker([lat,lng])
-
-    set_marker = (e)->
-        if marker != null
-            map.removeLayer(marker)
-        marker = L.marker(e.latlng,
-            draggable:true
-            icon:icon
-        )
-        marker.on('dragend', set_marker_latlng_to_form)
-        map.addLayer(marker)
-        set_marker_latlng_to_form()
+        if platlngs?
+            set_static_polyline(platlngs)
 
     set_static_marker = (latlng)->
         if smarker != null
@@ -171,9 +165,6 @@ $.fn.sites = (opts = {}) ->
         lng = marker.getLatLng().lng
         $('input[name=lat]').val(lat)
         $('input[name=lng]').val(lng)
-        set_static_marker([lat,lng])
-
-
 
 
     $(this).each(init)
