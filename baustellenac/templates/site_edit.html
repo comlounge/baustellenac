@@ -11,3 +11,12 @@
          data-polyline='{{site_polyline}}'
          data-sidewalk_only="{{site.sidewalk_only}}"></div>
 {% endblock %}
+
+{% block hidden_iputs %}
+    <input id="lat" name="lat" type="hidden" value="{{site.lat}}">
+    <input id="lng" name="lng" type="hidden" value="{{site.lng}}">
+    <input id="polyline"
+           name="polyline"
+           type="hidden"
+           value='{{site_polyline}}'>
+{% endblock %}
