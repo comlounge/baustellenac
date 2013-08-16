@@ -64,7 +64,7 @@ class SiteEditView(BaseHandler):
             site.update(f)
             self.config.dbs.baustellen.put(site)
             self.flash(self._(u"Baustellen %s aktualisiert" %site.name), category="info")
-            return redirect(self.url_for("sites"))
+            return redirect(self.url_for("admin_overview"))
         return self.render(
             site = site,
             site_polyline = json.dumps(site.polyline),
