@@ -79,18 +79,22 @@
 {%- endmacro -%}
 
 {%- macro form_field_boolean(field) -%}
-<label class="checkbox" for="{{ field.id }}" id="field-{{field.id}}">
-    {{field(**kwargs)}}
-    {{ field.label.text }}
-</label>
+<div class="controls">
+    <label class="checkbox" for="{{ field.id }}" id="field-{{field.id}}">
+        {{field(**kwargs)}}
+        {{ field.label.text }}
+    </label>
+</div>
 {%- endmacro -%}
 {%- macro form_field_multicheckbox(field) -%}
+<div class="controls">
     {% for subfield in field %}
         <label class="checkbox">
             {{ subfield() }}
             {{ subfield.label.text }}
         </label>
     {% endfor %}
+</div>
 {%- endmacro -%}
 
 {%- macro action_buttons(submit_title, cancel_title="Zurück setzten", submit_class="primary") -%}
@@ -106,9 +110,7 @@
     {% if field.type == 'HiddenField' %}
         {{ field() }}
     {% else %}
-        {% if field.type == 'BooleanFieldXXX' %}
-            {# Disabled check for Boolean Field because it was displayed oddly,
-               just treat it like other fields #}
+        {% if field.type == 'BooleanField' %}
             {{ form_field_boolean(field, **kwargs) }}
         {% else%}
             {{ form_field_label(field) }}
