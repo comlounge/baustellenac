@@ -36,13 +36,13 @@ $.fn.sites = (opts = {}) ->
 
     init = () ->
         init_icon()
-        init_static_map()
         lat = $('#siteconfig').data('lat')
         lng = $('#siteconfig').data('lng')
         pl_latlngs = $('#siteconfig').data('polyline')
         if not lat? or not lng? or lat == '' or lng == ''
             lat = default_lat
             lng = default_lng
+        init_static_map(lat,lng, pl_latlngs)
         $('.showmap').click( ()->
             $('#mapmodal').modal('show')
             if not map
@@ -69,7 +69,7 @@ $.fn.sites = (opts = {}) ->
         # set marker if found
         if lat != default_lat and lng != default_lng
             marker = L.marker([lat,lng],
-                draggable:false
+                draggable:true
                 clickable:false
                 icon:icon
             )
@@ -117,16 +117,7 @@ $.fn.sites = (opts = {}) ->
             drawnItems.addLayer(layer)
         )
 
-    init_static_map = ()->
-        lat = $('#siteconfig').data('lat')
-        lng = $('#siteconfig').data('lng')
-        platlngs = $('#siteconfig').data('polyline')
-        console.log(lat)
-        console.log(lng)
-        console.log(poloyline?)
-        if not lat? or not lng? or lat == '' or lng == ''
-            lat = default_lat
-            lng = default_lng
+    init_static_map = (lat,lng, pl_latlngs)->
         staticmap = L.map('staticmap',
             zoom: 16
             center: [lat,lng]
@@ -140,8 +131,8 @@ $.fn.sites = (opts = {}) ->
         }).addTo(staticmap)
         if lat != default_lat
             set_static_marker([lat,lng])
-        if platlngs?
-            set_static_polyline(platlngs)
+        if pl_latlngs?
+            set_static_polyline(pl_latlngs)
 
     set_static_marker = (latlng)->
         if smarker != null

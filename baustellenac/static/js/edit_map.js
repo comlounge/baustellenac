@@ -37,7 +37,6 @@ $.fn.sites = function(opts) {
   init = function() {
     var lat, lng, pl_latlngs;
     init_icon();
-    init_static_map();
     lat = $('#siteconfig').data('lat');
     lng = $('#siteconfig').data('lng');
     pl_latlngs = $('#siteconfig').data('polyline');
@@ -45,6 +44,7 @@ $.fn.sites = function(opts) {
       lat = default_lat;
       lng = default_lng;
     }
+    init_static_map(lat, lng, pl_latlngs);
     return $('.showmap').click(function() {
       $('#mapmodal').modal('show');
       if (!map) {
@@ -71,7 +71,7 @@ $.fn.sites = function(opts) {
     drawnItems = new L.FeatureGroup();
     if (lat !== default_lat && lng !== default_lng) {
       marker = L.marker([lat, lng], {
-        draggable: false,
+        draggable: true,
         clickable: false,
         icon: icon
       });
@@ -119,18 +119,7 @@ $.fn.sites = function(opts) {
       return drawnItems.addLayer(layer);
     });
   };
-  init_static_map = function() {
-    var lat, lng, platlngs;
-    lat = $('#siteconfig').data('lat');
-    lng = $('#siteconfig').data('lng');
-    platlngs = $('#siteconfig').data('polyline');
-    console.log(lat);
-    console.log(lng);
-    console.log(typeof poloyline !== "undefined" && poloyline !== null);
-    if (!(lat != null) || !(lng != null) || lat === '' || lng === '') {
-      lat = default_lat;
-      lng = default_lng;
-    }
+  init_static_map = function(lat, lng, pl_latlngs) {
     staticmap = L.map('staticmap', {
       zoom: 16,
       center: [lat, lng],
@@ -145,8 +134,8 @@ $.fn.sites = function(opts) {
     if (lat !== default_lat) {
       set_static_marker([lat, lng]);
     }
-    if (platlngs != null) {
-      return set_static_polyline(platlngs);
+    if (pl_latlngs != null) {
+      return set_static_polyline(pl_latlngs);
     }
   };
   set_static_marker = function(latlng) {
