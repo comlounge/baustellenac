@@ -31,14 +31,19 @@
             {% endblock %}
             <fieldset>
                 <!--legend>Kerndaten</legend-->
-                {{ macros.form_field(form.lat) }}
-                {{ macros.form_field(form.lng) }}
-                {{ macros.form_field(form.polyline) }}
+                {% block hidden_iputs %}
+                    <input id="lat" name="lat" type="hidden" value="">
+                    <input id="lng" name="lng" type="hidden" value="">
+                    <input id="polyline"
+                           name="polyline"
+                           type="hidden"
+                           value='[]'>
+                {% endblock %}
                 {{ macros.form_field(form.name, class="required large span6") }}
                 {{ macros.form_field(form.subtitle, class="required span6") }}
                 {{ macros.form_field(form.description, class="required span6") }}
                 {{ macros.form_field(form.organisation, class="required span6") }}
-                {{ macros.form_field(form.sidewalk_only, class="span3") }}
+                {{ macros.form_field(form.sidewalk_only) }}
                 {{ macros.form_field(form.start_date, class="span2") }}
                 {{ macros.form_field(form.end_date, class="span2") }}
                 {{ macros.form_field(form.approx_timeframe, class="span6") }}
