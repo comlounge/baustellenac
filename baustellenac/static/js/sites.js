@@ -37,7 +37,9 @@ $.fn.sites = function(opts) {
       return make_marker($(this));
     });
     $('.site').mouseover(function() {
-      return markers[$(this).data('id')].openPopup();
+      if (markers.hasOwnProperty($(this).data('id'))) {
+        return markers[$(this).data('id')].openPopup();
+      }
     });
     $('.site').click(function() {
       return show_infomodal($(this).data('id'));
@@ -55,7 +57,6 @@ $.fn.sites = function(opts) {
   };
   onLocationFound = function(e) {
     var radius;
-    console.log("yay");
     radius = e.accuracy / 2;
     L.marker(e.latlng).addTo(map).bindPopup("You are within " + radius + " meters from this point").openPopup();
     return L.circle(e.latlng, radius).addTo(map);
@@ -76,7 +77,7 @@ $.fn.sites = function(opts) {
     });
   };
   create_infomodal = function(data) {
-    var address, adr, approx_time, body, desc, end_date, end_time, m, organisation, start_date, start_time, subtitle;
+    var approx_time, body, desc, end_date, end_time, m, organisation, start_date, start_time, subtitle;
     m = $('#infomodal');
     m.find('.modal-header h3').html(data['name']);
     body = "";
@@ -88,25 +89,14 @@ $.fn.sites = function(opts) {
     start_time = $('<div class="row"></div>').append('<div class="span2">Beginn</div>').append('<div class="span4">' + start_date.toLocaleDateString('de') + '</div>');
     end_date = new Date(data['end_date']);
     end_time = $('<div class="row"></div>').append('<div class="span2">Ende</div>').append('<div class="span4">' + end_date.toLocaleDateString('de') + '</div>');
-    adr = data['sections'][0]['street'] + ', ' + data['sections'][0]['zip'] + ' ' + data['sections'][0]['city'];
-    address = $('<div class="row"></div>').append('<div class="span2">Adresse</div>').append('<div class="span4">' + adr + '</div>');
     m.find('.modal-body').html('');
-    return m.find('.modal-body').append(subtitle).append(desc).append(organisation).append(approx_time).append(start_time).append(end_time).append(address);
+    return m.find('.modal-body').append(subtitle).append(desc).append(organisation).append(approx_time).append(start_time).append(end_time);
   };
   make_marker = function(elem) {
-    var end_lat, end_lng, icon, lat, lng, marker, start_lat, start_lng;
-    start_lat = elem.data('start_lat');
-    start_lng = elem.data('start_lng');
-    end_lat = elem.data('end_lat');
-    end_lng = elem.data('end_lng');
-    if (start_lat !== 'None' && start_lng !== 'None') {
-      if (end_lat !== 'None' && end_lng !== 'None') {
-        lat = (start_lat + end_lat) / 2;
-        lng = (start_lng + end_lng) / 2;
-      } else {
-        lat = start_lat;
-        lng = start_lng;
-      }
+    var icon, lat, lng, marker;
+    lat = elem.data('lat');
+    lng = elem.data('lng');
+    if (lat !== '' && lng !== '') {
       icon = icon_default;
       if (elem.data('sidewalk_only') === 'True') {
         icon = icon_sidewalk;
