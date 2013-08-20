@@ -39,13 +39,22 @@ class ImportData(ScriptBase):
                     if d['Ende genau'].strip():
                         site_data['end_date'] = datetime.datetime.strptime(d['Ende genau'], '%d.%m.%Y')
 
-                    sections, exact_position = self.get_sections(d)
-                    if len(sections) > 0:
-                        site_data['sections'] = sections
-                        site_data['exact_position'] = exact_position
-                        site = Site(site_data)
-                        del site['_id']
-                        self.app.config.dbs.baustellen.save(site)
+                    latlng, exact_position = self.get_latlng(d)
+
+                    site_data['lat'] = latlng['lat']
+                    site_data['lng'] = latlng['lng']
+                    site_data['exact_position'] = exact_position
+                    site = Site(site_data)
+                    del site['_id']
+                    self.app.config.dbs.baustellen.save(site)
+
+                    #sections, exact_position = self.get_sections(d)
+                    #if len(sections) > 0:
+                    #    site_data['sections'] = sections
+                    #    site_data['exact_position'] = exact_position
+                    #    site = Site(site_data)
+                    #    del site['_id']
+                    #    self.app.config.dbs.baustellen.save(site)
 
 
     def get_sections(self, d):
@@ -125,6 +134,40 @@ class ImportData(ScriptBase):
         #for s in d['Strassen'].split(','):
         #
         #print streets
+
+    def get_latlng(self,d):
+        streets_string = d['Strassen']
+        exact_position = True
+
+        # check for sub_streets (intersections)
+        sub_streets = []
+        if '(' in streets_string:
+            s_match = re.search(r'\((.*?)\)', streets_string)
+            sub_streets = s_match.group(1).split(',')
+            streets_string = streets_string.replace(s_match.group(0), '')
+        streets = [{'name':s, 'number':[]} for s in streets_string.strip().split(',')]
+
+        if len(sub_streets) > 0:
+            return self.get_gm_latlng(streets[0]['name'])
+        else:
+            #return []
+            for s in streets:
+                # check for streetnumbers
+                n_match = re.search(r'([0-9]+(\s*(-|/)*\s*[0-9]+)*)', s['name'])
+                if n_match is not None:
+                    s['name'] = s['name'].replace(n_match.group(0), '').strip()
+                    numbers_string = n_match.group(1).replace(' ', '').replace('/', '-')
+                    numbers = numbers_string.split('-')
+                    if len(numbers) > 1:
+                        if numbers[0] == '':
+                            numbers[0] = '1'
+                        if numbers[1] == '':
+                            numbers[1] = '99999'
+                    s['number'] = numbers
+                else:
+                    s['number'] = ['1', '99999']
+                break # TODO: only first is used
+            return self.get_gm_latlng(s['name'], s['number'][0])
 
     def get_gm_latlng(self, street, number=None):
         query = street
