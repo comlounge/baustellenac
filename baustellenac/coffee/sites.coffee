@@ -38,7 +38,8 @@ $.fn.sites = (opts = {}) ->
         )
 
         $('.site').mouseover(() ->
-            markers[$(this).data('id')].openPopup()
+            if markers.hasOwnProperty($(this).data('id'))
+                markers[$(this).data('id')].openPopup()
         )
         $('.site').click(() ->
             show_infomodal($(this).data('id'))
@@ -54,7 +55,6 @@ $.fn.sites = (opts = {}) ->
         )
 
     onLocationFound = (e) ->
-        console.log "yay"
         radius = e.accuracy / 2;
         L.marker(e.latlng).addTo(map)
             .bindPopup("You are within " + radius + " meters from this point").openPopup()
@@ -100,10 +100,10 @@ $.fn.sites = (opts = {}) ->
         end_time = $('<div class="row"></div>')
             .append('<div class="span2">Ende</div>')
             .append('<div class="span4">'+end_date.toLocaleDateString('de')+'</div>')
-        adr = data['sections'][0]['street']+', '+data['sections'][0]['zip']+' '+data['sections'][0]['city']
-        address = $('<div class="row"></div>')
-            .append('<div class="span2">Adresse</div>')
-            .append('<div class="span4">'+adr+'</div>')
+        #adr = data['sections'][0]['street']+', '+data['sections'][0]['zip']+' '+data['sections'][0]['city']
+        #address = $('<div class="row"></div>')
+        #    .append('<div class="span2">Adresse</div>')
+        #    .append('<div class="span4">'+adr+'</div>')
 
         m.find('.modal-body').html('')
         m.find('.modal-body')
@@ -113,23 +113,13 @@ $.fn.sites = (opts = {}) ->
             .append(approx_time)
             .append(start_time)
             .append(end_time)
-            .append(address)
+            #.append(address)
 
     make_marker = (elem) ->
-        start_lat = elem.data('start_lat')
-        start_lng = elem.data('start_lng')
-        end_lat = elem.data('end_lat')
-        end_lng = elem.data('end_lng')
+        lat = elem.data('lat')
+        lng = elem.data('lng')
 
-        if start_lat != 'None' and start_lng != 'None'
-            if end_lat != 'None' and end_lng != 'None'
-                lat = (start_lat + end_lat)/2
-                lng = (start_lng + end_lng)/2
-                #make_route(start_lat,start_lng,end_lat,end_lng)
-            else
-                lat = start_lat
-                lng = start_lng
-
+        if lat != '' and lng != ''
             icon = icon_default
             if elem.data('sidewalk_only') == 'True'
                 icon = icon_sidewalk
