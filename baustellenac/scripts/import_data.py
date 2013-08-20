@@ -41,9 +41,10 @@ class ImportData(ScriptBase):
 
                     latlng, exact_position = self.get_latlng(d)
 
-                    site_data['lat'] = latlng['lat']
-                    site_data['lng'] = latlng['lng']
-                    site_data['exact_position'] = exact_position
+                    if latlng is not None:
+                        site_data['lat'] = latlng['lat']
+                        site_data['lng'] = latlng['lng']
+                        site_data['exact_position'] = exact_position
                     site = Site(site_data)
                     del site['_id']
                     self.app.config.dbs.baustellen.save(site)
