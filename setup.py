@@ -28,6 +28,7 @@ setup(name='baustellenac',
         "mongogogo",
         "userbase",
         "setuptools",
+        "requests",
       ],
       entry_points="""
       [paste.app_factory]
