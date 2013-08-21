@@ -8,6 +8,7 @@ $.fn.sites = (opts = {}) ->
         zoom: map_zoom
     )
     markers = {}
+    polyline = null
     icon_default = L.icon(
         iconUrl: '/static/img/Under_construction_icon-red.svg',
         iconSize: [38, 95],
@@ -127,6 +128,18 @@ $.fn.sites = (opts = {}) ->
             marker = L.marker([lat, lng], {icon: icon}).addTo(map)
             markers[elem.data('id')] = marker
             marker.bindPopup(make_infopopup(elem))
+            marker.on('mouseover', ()->
+                for k of markers
+                    if markers[k] != marker
+                        markers[k].setOpacity(0.5)
+                show_polyline(elem)
+            )
+            marker.on('mouseout', ()->
+                for k of markers
+                    markers[k].setOpacity(1)
+                if map.hasLayer(polyline)
+                    map.removeLayer(polyline)
+            )
 
 
     make_infopopup = (elem) ->
@@ -157,6 +170,15 @@ $.fn.sites = (opts = {}) ->
                 alert("Error");
             ,
         )
+
+    show_polyline = (elem) ->
+        pl_latlngs = elem.data('polyline')
+        if pl_latlngs
+            polyline = L.polyline(pl_latlngs,
+                clickable: true
+            ).addTo(map)
+
+
 
     $(this).each(init)
     this

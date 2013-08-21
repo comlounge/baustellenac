@@ -8,7 +8,7 @@
     <div id="siteconfig"
          data-lat="{{site.lat}}"
          data-lng="{{site.lng}}"
-         data-polyline='{{site_polyline}}'
+         data-polyline='{{site.polyline|tojson|safe}}'
          data-sidewalk_only="{{site.sidewalk_only}}"></div>
 {% endblock %}
 
@@ -18,5 +18,5 @@
     <input id="polyline"
            name="polyline"
            type="hidden"
-           value='{{site_polyline}}'>
+           value='{{site.polyline|tojson|safe}}'>
 {% endblock %}
