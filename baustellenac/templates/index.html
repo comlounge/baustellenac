@@ -45,7 +45,8 @@
                                 data-start_date="{{site.start_date}}"
                                 data-end_date="{{site.end_date}}"
                                 data-lat="{{site.lat}}"
-                                data-lng="{{site.lng}}">
+                                data-lng="{{site.lng}}"
+                                data-polyline='{{site.polyline|tojson|safe}}'>
                                 {{site.name}}
                                 <span class="muted">({{site.approx_timeframe}})</span>
                             </td>

@@ -67,7 +67,6 @@ class SiteEditView(BaseHandler):
             return redirect(self.url_for("admin_overview"))
         return self.render(
             site = site,
-            site_polyline = json.dumps(site.polyline),
             form = form
         )
     post = get
