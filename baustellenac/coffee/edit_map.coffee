@@ -43,10 +43,11 @@ $.fn.sites = (opts = {}) ->
             lat = default_lat
             lng = default_lng
         init_static_map(lat,lng, pl_latlngs)
-        $('.showmap').click( ()->
+        $('.showmap').click( (event)->
             $('#mapmodal').modal('show')
             if not map
                 init_edit_map(lat,lng,pl_latlngs)
+            false
         )
 
     init_icon = () ->
