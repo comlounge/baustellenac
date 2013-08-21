@@ -5,7 +5,7 @@ import uuid
 import json
 
 from starflyer import asjson, redirect
-from .. import BaseHandler
+from .. import BaseHandler, logged_in
 from forms import SiteForm
 from baustellenac import db
 
@@ -27,6 +27,7 @@ class SiteAddView(BaseHandler):
 
     template = "site_add.html"
 
+    @logged_in()
     def get(self):
         """render the view"""
         form = SiteForm()
@@ -34,6 +35,7 @@ class SiteAddView(BaseHandler):
             form = form
         )
 
+    @logged_in()
     def post(self):
         """save site"""
         form = SiteForm(self.request.form)
@@ -55,6 +57,7 @@ class SiteEditView(BaseHandler):
 
     template = "site_edit.html"
 
+    @logged_in()
     def get(self, site_id):
         """render the view"""
         site = self.config.dbs.baustellen.get(site_id)
