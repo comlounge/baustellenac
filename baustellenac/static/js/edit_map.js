@@ -45,11 +45,12 @@ $.fn.sites = function(opts) {
       lng = default_lng;
     }
     init_static_map(lat, lng, pl_latlngs);
-    return $('.showmap').click(function() {
+    return $('.showmap').click(function(event) {
       $('#mapmodal').modal('show');
       if (!map) {
-        return init_edit_map(lat, lng, pl_latlngs);
+        init_edit_map(lat, lng, pl_latlngs);
       }
+      return false;
     });
   };
   init_icon = function() {

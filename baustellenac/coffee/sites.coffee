@@ -41,7 +41,9 @@ $.fn.sites = (opts = {}) ->
         $('.site').mouseover(() ->
             if markers.hasOwnProperty($(this).data('id'))
                 markers[$(this).data('id')].openPopup()
+            on_site_over($(this), markers[$(this).data('id')])
         )
+        $('.site').on('mouseout', on_site_out)
         $('.site').click(() ->
             show_infomodal($(this).data('id'))
         )
@@ -129,17 +131,9 @@ $.fn.sites = (opts = {}) ->
             markers[elem.data('id')] = marker
             marker.bindPopup(make_infopopup(elem))
             marker.on('mouseover', ()->
-                for k of markers
-                    if markers[k] != marker
-                        markers[k].setOpacity(0.5)
-                show_polyline(elem)
+                on_site_over(elem,marker)
             )
-            marker.on('mouseout', ()->
-                for k of markers
-                    markers[k].setOpacity(1)
-                if map.hasLayer(polyline)
-                    map.removeLayer(polyline)
-            )
+            marker.on('mouseout', on_site_out)
 
 
     make_infopopup = (elem) ->
@@ -178,7 +172,17 @@ $.fn.sites = (opts = {}) ->
                 clickable: true
             ).addTo(map)
 
+    on_site_over = (elem, marker) ->
+        for k of markers
+            if markers[k] != marker
+                markers[k].setOpacity(0.5)
+        show_polyline(elem)
 
+    on_site_out = ()->
+        for k of markers
+            markers[k].setOpacity(1)
+        if map.hasLayer(polyline)
+            map.removeLayer(polyline)
 
     $(this).each(init)
     this
