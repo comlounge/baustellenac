@@ -49,9 +49,19 @@ $.fn.sites = (opts = {}) ->
                 init_edit_map(lat,lng,pl_latlngs)
             false
         )
+        $('input#sidewalk_only').on('change', ()->
+            if $('input#sidewalk_only').attr('checked') == 'checked'
+                icon = icon_sidewalk
+            else
+                icon = icon_default
+            if marker?
+                marker.setIcon(icon)
+            if smarker?
+                smarker.setIcon(icon)
+        )
 
     init_icon = () ->
-        if $('#site-form').data('sidewalk_only') == 'True'
+        if $('#siteconfig').data('sidewalk_only') == 'True'
             icon = icon_sidewalk
         else
             icon = icon_default
