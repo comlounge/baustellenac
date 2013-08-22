@@ -45,16 +45,29 @@ $.fn.sites = function(opts) {
       lng = default_lng;
     }
     init_static_map(lat, lng, pl_latlngs);
-    return $('.showmap').click(function(event) {
+    $('.showmap').click(function(event) {
       $('#mapmodal').modal('show');
       if (!map) {
         init_edit_map(lat, lng, pl_latlngs);
       }
       return false;
     });
+    return $('input#sidewalk_only').on('change', function() {
+      if ($('input#sidewalk_only').attr('checked') === 'checked') {
+        icon = icon_sidewalk;
+      } else {
+        icon = icon_default;
+      }
+      if (marker != null) {
+        marker.setIcon(icon);
+      }
+      if (smarker != null) {
+        return smarker.setIcon(icon);
+      }
+    });
   };
   init_icon = function() {
-    if ($('#site-form').data('sidewalk_only') === 'True') {
+    if ($('#siteconfig').data('sidewalk_only') === 'True') {
       return icon = icon_sidewalk;
     } else {
       return icon = icon_default;
