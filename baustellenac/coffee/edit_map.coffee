@@ -178,5 +178,41 @@ $(document).ready( () ->
 
     $("body").sites();
 
+    # editing organisation (Träger)
+    $('#organisation_add_button').click(()->
+        $('#organisationmodal').modal('show')
+        $('#organisation-name').val('')
+        $('#organisation-name').focus()
+
+        $('#organisation-name').keypress((e)->
+            if e.which == 13
+                $('#organisation_add').focus()
+                submit_organisation()
+                $('#organisationmodal').modal('hide')
+        )
+
+    )
+    $('#organisation_add').click(()->
+        submit_organisation()
+    )
+
+    submit_organisation = () ->
+        if $('#organisation-name').val() != ''
+            $.ajax(
+                url: "/organisation/add"
+                type: 'POST'
+                data:
+                    name: $('#organisation-name').val()
+                error: (data) ->
+                    console.log 'error'
+                success: (data) ->
+                    $('#organisation')
+                    .append($("<option></option>")
+                        .attr("value",data['name'])
+                        .text(data['name'])
+                    )
+                    $('#organisation').val(data['name'])
+            )
+
 )
 

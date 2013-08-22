@@ -183,5 +183,39 @@ $.fn.sites = function(opts) {
 };
 
 $(document).ready(function() {
-  return $("body").sites();
+  var submit_organisation;
+  $("body").sites();
+  $('#organisation_add_button').click(function() {
+    $('#organisationmodal').modal('show');
+    $('#organisation-name').val('');
+    $('#organisation-name').focus();
+    return $('#organisation-name').keypress(function(e) {
+      if (e.which === 13) {
+        $('#organisation_add').focus();
+        submit_organisation();
+        return $('#organisationmodal').modal('hide');
+      }
+    });
+  });
+  $('#organisation_add').click(function() {
+    return submit_organisation();
+  });
+  return submit_organisation = function() {
+    if ($('#organisation-name').val() !== '') {
+      return $.ajax({
+        url: "/organisation/add",
+        type: 'POST',
+        data: {
+          name: $('#organisation-name').val()
+        },
+        error: function(data) {
+          return console.log('error');
+        },
+        success: function(data) {
+          $('#organisation').append($("<option></option>").attr("value", data['name']).text(data['name']));
+          return $('#organisation').val(data['name']);
+        }
+      });
+    }
+  };
 });

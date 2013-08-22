@@ -110,6 +110,9 @@ class BaustellenApp(Application):
         URL('/site/add', 'site_add', handlers.sites.SiteAddView),
         URL('/site/<site_id>/edit', 'site_edit', handlers.sites.SiteEditView),
 
+        # organisation
+        URL('/organisation/add', 'organisation_add', handlers.admin.OrganisationAdd),
+
         # admin
         URL('/admin', 'admin_overview', handlers.admin.Overview),
 
@@ -126,6 +129,7 @@ class BaustellenApp(Application):
             self.config.mongodb_port
         )[self.config.mongodb_name]
         self.config.dbs.baustellen = db.Sites(mydb.sites, app=self, config=self.config)
+        self.config.dbs.traeger = db.Organisations(mydb.organisations, app=self, config=self.config)
 
 
 def app(config, **local_config):

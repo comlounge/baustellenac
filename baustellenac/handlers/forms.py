@@ -105,7 +105,8 @@ class SiteForm(BaseForm):
     name = TextField(u"Name", default="")
     subtitle = TextField(u"zusätzl. Titel", default="")
     description = TextField(u"Beschreibung", default="")
-    organisation = TextField(u"Träger", default="")
+    #organisation = TextField(u"Träger", default="")
+    organisation = SelectField(u"Träger", choices=[])
     sidewalk_only = BooleanField(u"Nur auf dem Gehweg?")
     name = TextField(u"Name", default="")
     start_date = DateField(u"Start", format='%d.%m.%Y', widget=DatePickerWidget()) # start date of project
