@@ -21,6 +21,24 @@
         </div>
     </div>
 
+    <div id="organisationmodal" class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Träger hinzufügen</h3>
+        </div>
+        <div class="modal-body">
+            <input type="text" id="organisation-name" class="span6">
+        </div>
+        <div class="modal-footer">
+            <a href="#" id="organisation_add" data-dismiss="modal" class="btn btn-info">Speichern</a>
+            <a href="#" data-dismiss="modal" class="btn">Schließen</a>
+        </div>
+    </div>
+
+
+
+
+
     {% block site_header %}
         <h3>neue Baustelle anlegen</h3>
     {% endblock %}
@@ -42,7 +60,15 @@
                 {{ macros.form_field(form.name, class="required large span6") }}
                 {{ macros.form_field(form.subtitle, class="required span6") }}
                 {{ macros.form_field(form.description, class="required span6") }}
-                {{ macros.form_field(form.organisation, class="required span6") }}
+                <div class="pull-right span6">
+                <button type="button"
+                        id="organisation_add_button"
+                        class="btn btn-success pull-left"
+                        title="neuen Träger hinzufügen">
+                    <i class="icon-white icon-plus"></i>
+                </button>
+                </div>
+                {{ macros.form_field(form.organisation, class="required span4") }}
                 {{ macros.form_field(form.start_date, class="span2") }}
                 {{ macros.form_field(form.end_date, class="span2") }}
                 {{ macros.form_field(form.approx_timeframe, class="span6") }}
