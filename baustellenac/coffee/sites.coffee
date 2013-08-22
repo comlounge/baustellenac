@@ -3,6 +3,7 @@ $.fn.sites = (opts = {}) ->
 
     map_zoom = 13
     max_zoom = 18
+    current_zoom = 16
     map = L.map('map',
         center: [50.7753455, 6.0838868]
         zoom: map_zoom
@@ -38,15 +39,17 @@ $.fn.sites = (opts = {}) ->
             make_marker($(this))
         )
 
-        $('.site').mouseover(() ->
-            if markers.hasOwnProperty($(this).data('id'))
-                markers[$(this).data('id')].openPopup()
-            on_site_over($(this), markers[$(this).data('id')])
-        )
-        $('.site').on('mouseout', on_site_out)
         $('.site').click(() ->
-            show_infomodal($(this).data('id'))
+            if markers.hasOwnProperty($(this).data('id'))
+                map.panTo(markers[$(this).data('id')].getLatLng(), {'animate':true})
+                map.setZoom(current_zoom, {'animate':true})
+                markers[$(this).data('id')].openPopup()
+            show_polyline($(this))
         )
+        #$('.site').on('mouseout', on_site_out)
+        #$('.site').click(() ->
+        #    show_infomodal($(this).data('id'))
+        #)
 
         map.locate({setView: true, maxZoom: 2})
         map.on('locationfound', onLocationFound)
@@ -130,10 +133,10 @@ $.fn.sites = (opts = {}) ->
             marker = L.marker([lat, lng], {icon: icon}).addTo(map)
             markers[elem.data('id')] = marker
             marker.bindPopup(make_infopopup(elem))
-            marker.on('mouseover', ()->
-                on_site_over(elem,marker)
+            marker.on('click', ()->
+                show_polyline(elem)
             )
-            marker.on('mouseout', on_site_out)
+            #marker.on('mouseout', remove_polyline)
 
 
     make_infopopup = (elem) ->
@@ -166,6 +169,7 @@ $.fn.sites = (opts = {}) ->
         )
 
     show_polyline = (elem) ->
+        remove_polyline()
         pl_latlngs = elem.data('polyline')
         if pl_latlngs
             polyline = L.polyline(pl_latlngs,
@@ -173,15 +177,15 @@ $.fn.sites = (opts = {}) ->
             ).addTo(map)
 
     on_site_over = (elem, marker) ->
-        for k of markers
-            if markers[k] != marker
-                markers[k].setOpacity(0.5)
+        #for k of markers
+        #    if markers[k] != marker
+        #        markers[k].setOpacity(0.5)
         show_polyline(elem)
 
-    on_site_out = ()->
-        for k of markers
-            markers[k].setOpacity(1)
-        if map.hasLayer(polyline)
+    remove_polyline = ()->
+        #for k of markers
+        #    markers[k].setOpacity(1)
+        if polyline and map.hasLayer(polyline)
             map.removeLayer(polyline)
 
     $(this).each(init)
