@@ -31,8 +31,7 @@ class SiteAddView(BaseHandler):
     def get(self):
         """render the view"""
         form = SiteForm()
-        organisations = [('', u'Wählen Sie einen Träger...')]
-        organisations += [(o.name,o.name) for o in self.config.dbs.traeger.find()]
+        organisations = [(o.name,o.name) for o in self.config.dbs.traeger.find().sort('name')]
         form.organisation.choices = organisations
         return self.render(
             form = form,
@@ -65,8 +64,7 @@ class SiteEditView(BaseHandler):
         """render the view"""
         site = self.config.dbs.baustellen.get(site_id)
         form = SiteForm(self.request.form, obj=site)
-        organisations = [('', u'Wählen Sie einen Träger...')]
-        organisations += [(o.name,o.name) for o in self.config.dbs.traeger.find()]
+        organisations = [(o.name,o.name) for o in self.config.dbs.traeger.find().sort('name')]
         form.organisation.choices = organisations
         if self.request.method == 'POST' and form.validate():
             f = form.data
