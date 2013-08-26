@@ -835,9 +835,11 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .invisible{visibility:hidden;}
 .affix{position:fixed;}
 html,body{height:100%;}
-.mapcontainer{height:400px;}
+#mapmodal{width:100%;left:0;margin-left:0;top:0;margin-top:0!important;height:100%;border:0px solid #999;border:0px solid rgba(0, 0, 0, 0.3);-moz-border-radius:0px;border-radius:0px;}
+.modal-map-header{height:5%;padding:10px 10px 0 10px;margin-left:50px;}
+.mapcontainer{height:95%;}
 .staticmapcontainer{height:200px;width:300px;margin-right:10px;}
-#map{height:100%;}
+#map{height:95%;}
 #staticmap{height:100%;}
 .site{cursor:pointer;}
 .container-fluid{margin:0 auto;height:100%;padding:0px 0 80px 0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;}
@@ -852,3 +854,4 @@ header{padding:5px;height:39px;border-bottom:1px solid #c0c0c0;}
 .navigation-container{padding:0 0 120px 0;overflow-y:auto;overflow-x:hidden;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;}
 #legend{display:block;border-top:1px solid #a0a0a0;height:120px !important;padding:5px;overflow:auto;}#legend .item{padding-bottom:10px;}
 #legend .icon{margin-right:10px;width:20px;height:20px;}
+.inputfieldicon{position:relative;margin-left:-30px;z-index:2;opacity:0.5;}
