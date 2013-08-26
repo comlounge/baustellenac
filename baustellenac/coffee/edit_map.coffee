@@ -36,19 +36,15 @@ $.fn.sites = (opts = {}) ->
 
     init = () ->
         init_icon()
-        lat = $('#siteconfig').data('lat')
-        lng = $('#siteconfig').data('lng')
-        pl_latlngs = $('#siteconfig').data('polyline')
-        if not lat? or not lng? or lat == '' or lng == ''
-            lat = default_lat
-            lng = default_lng
-        init_static_map(lat,lng, pl_latlngs)
+        init_marker_polyline()
         $('.showmap').click( (event)->
             $('#mapmodal').modal('show')
             if not map
-                init_edit_map(lat,lng,pl_latlngs)
+                init_edit_map()
             false
         )
+        init_static_map()
+
         $('input#sidewalk_only').on('change', ()->
             if $('input#sidewalk_only').attr('checked') == 'checked'
                 icon = icon_sidewalk
@@ -60,15 +56,69 @@ $.fn.sites = (opts = {}) ->
                 smarker.setIcon(icon)
         )
 
+        # init street search in edit map view
+        $('#streetsselect').select2(
+            placeholder: "Suchen Sie nach einer Strasse..."
+            allowClear: true
+            openOnEnter: true
+        )
+        $('#streetsselect').on('keydown', (e) ->
+            $('#streetsselect').select2('open')
+        )
+        $('#streetsselect').on('change', (e) ->
+            street_latlng = JSON.parse($('#streetsselect').val())
+            if marker != null
+                drawnItems.removeLayer(marker)
+            marker = L.marker(street_latlng,
+                draggable:true
+                icon:icon
+            )
+            drawnItems.addLayer(marker)
+            map.panTo(street_latlng)
+            set_marker_latlng_to_form()
+            set_static_marker()
+        )
+
+        # modal events
+        $('#mapmodal').on('shown', () ->
+            $('#streetsselect').focus()
+        )
+        $('#mapmodal').on('hidden', () ->
+            set_marker_latlng_to_form()
+            set_static_marker()
+            # set polyline form data
+            $('#polyline').val(JSON.stringify(polyline.getLatLngs()))
+            set_static_polyline()
+        )
+
     init_icon = () ->
         if $('#siteconfig').data('sidewalk_only') == 'True'
             icon = icon_sidewalk
         else
             icon = icon_default
 
-    init_edit_map = (lat,lng, pl_latlngs)->
+    init_marker_polyline = ()->
+        lat = $('#siteconfig').data('lat')
+        lng = $('#siteconfig').data('lng')
+        if lat? and lng?
+            marker = L.marker([lat,lng],
+                draggable:true
+                icon:icon
+            )
+        pl_latlngs = $('#siteconfig').data('polyline')
+        if pl_latlngs?
+            polyline = L.polyline(pl_latlngs,
+                clickable: true
+                weight: 10
+            )
+
+    init_edit_map = ()->
+        if marker?
+            latlng = marker.getLatLng()
+        else
+            latlng = [default_lat,default_lng]
         map = L.map('map',
-            center: [lat, lng]
+            center: latlng
             zoom: map_zoom
         )
         L.tileLayer(map_url, {
@@ -78,18 +128,10 @@ $.fn.sites = (opts = {}) ->
 
         drawnItems = new L.FeatureGroup()
         # set marker if found
-        if lat != default_lat and lng != default_lng
-            marker = L.marker([lat,lng],
-                draggable:true
-                clickable:false
-                icon:icon
-            )
+        if marker?
             drawnItems.addLayer(marker)
         # draw polyline if found
-        if pl_latlngs
-            polyline = L.polyline(pl_latlngs,
-                clickable: true
-            )
+        if polyline?
             drawnItems.addLayer(polyline)
 
         map.addLayer(drawnItems)
@@ -97,9 +139,9 @@ $.fn.sites = (opts = {}) ->
         drawControl = new L.Control.Draw(
             position: 'topleft'
             draw:
-                marker: {
+                marker:
+                    draggable:true
                     icon: icon
-                }
                 polygon: false
                 circle: false
                 rectangle: false
@@ -114,24 +156,22 @@ $.fn.sites = (opts = {}) ->
             if type == 'marker'
                 drawnItems.removeLayer(marker)
                 marker = layer
-                # set marker form data
-                set_marker_latlng_to_form()
-                # set marker on static map
-                set_static_marker([marker.getLatLng().lat, marker.getLatLng().lng])
+                layer.options.draggable = true
             if type == 'polyline'
-                drawnItems.removeLayer(polyline)
+                #drawnItems.removeLayer(polyline)
                 polyline = layer
-                # set polyline form data
-                $('#polyline').val(JSON.stringify(polyline._latlngs))
-                # set polyline on static map
-                set_static_polyline(polyline._latlngs)
+                layer.options.weight = 10
             drawnItems.addLayer(layer)
         )
 
-    init_static_map = (lat,lng, pl_latlngs)->
+    init_static_map = ()->
+        if marker?
+            latlng = marker.getLatLng()
+        else
+            latlng = [default_lat,default_lng]
         staticmap = L.map('staticmap',
             zoom: 16
-            center: [lat,lng]
+            center: latlng
             dragging: false
             scrollWheelZoom: false
             doubleClickZoom: false
@@ -140,43 +180,55 @@ $.fn.sites = (opts = {}) ->
         L.tileLayer(map_url, {
             maxZoom: max_zoom
         }).addTo(staticmap)
-        if lat != default_lat
-            set_static_marker([lat,lng])
-        if pl_latlngs?
-            set_static_polyline(pl_latlngs)
+        if marker?
+            set_static_marker()
+        if polyline?
+            set_static_polyline()
 
-    set_static_marker = (latlng)->
+    set_static_marker = ()->
         if smarker != null
             staticmap.removeLayer(smarker)
-        smarker = L.marker(latlng,
-            draggable:false
-            clickable:false
-            icon:icon
-        )
-        staticmap.addLayer(smarker)
-        staticmap.panTo(latlng)
+        if marker?
+            smarker = L.marker(marker.getLatLng(),
+                draggable:false
+                clickable:false
+                icon:icon
+            )
+            staticmap.addLayer(smarker)
+            staticmap.panTo(marker.getLatLng())
 
-    set_static_polyline = (latlngs)->
+    set_static_polyline = ()->
         if spolyline?
             staticmap.removeLayer(spolyline)
-        spolyline = L.polyline(latlngs);
-        staticmap.addLayer(spolyline)
+        if polyline?
+            spolyline = L.polyline(polyline.getLatLngs(), weight:10);
+            staticmap.addLayer(spolyline)
 
     set_marker_latlng_to_form = ()->
-        lat = marker.getLatLng().lat
-        lng = marker.getLatLng().lng
-        $('input[name=lat]').val(lat)
-        $('input[name=lng]').val(lng)
+        if marker?
+            $('input[name=lat]').val(marker.getLatLng().lat)
+            $('input[name=lng]').val(marker.getLatLng().lng)
 
 
     $(this).each(init)
     this
 
 
+$.fn.mapsearch = (opts = {}) ->
+
+    $this = $(this)
+
+    init = () ->
+
+    $(this).each(init)
+    this
+
 
 $(document).ready( () ->
 
-    $("body").sites();
+    $("#streetsselect").mapsearch()
+
+    $("body").sites()
 
     # editing organisation (Träger)
     $('#organisation_add_button').click(()->
@@ -195,7 +247,6 @@ $(document).ready( () ->
     $('#organisation_add').click(()->
         submit_organisation()
     )
-
     submit_organisation = () ->
         if $('#organisation-name').val() != ''
             $.ajax(

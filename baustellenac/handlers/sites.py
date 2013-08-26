@@ -33,15 +33,7 @@ class SiteAddView(BaseHandler):
         form = SiteForm()
         organisations = [(o.name,o.name) for o in self.config.dbs.traeger.find().sort('name')]
         form.organisation.choices = organisations
-        return self.render(
-            form = form,
-        )
-
-    @logged_in()
-    def post(self):
-        """save site"""
-        form = SiteForm(self.request.form)
-        if form.validate():
+        if self.request.method == 'POST' and form.validate():
             f = form.data
             site_data = {}
             site_data.update(f)
@@ -51,8 +43,10 @@ class SiteAddView(BaseHandler):
             self.flash(self._(u"Baustellen %s erfolgreich angelegt" %site.name), category="info")
             return redirect(self.url_for("admin_overview"))
         return self.render(
-            form = form
+            form = form,
+            streets = self.config.dbs.streets.find().sort('name')
         )
+    post = get
 
 class SiteEditView(BaseHandler):
     """shows and processes the site edit form"""
@@ -75,5 +69,6 @@ class SiteEditView(BaseHandler):
         return self.render(
             site = site,
             form = form,
+            streets = self.config.dbs.streets.find()
         )
     post = get
