@@ -29,6 +29,7 @@ setup(name='baustellenac',
         "userbase",
         "setuptools",
         "requests",
+        "geopy",
       ],
       entry_points="""
       [paste.app_factory]
