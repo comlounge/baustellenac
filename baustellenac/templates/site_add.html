@@ -7,17 +7,20 @@
 
 {% block content %}
     <div id="mapmodal" class="modal hide fade">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Karte</h3>
+        <div class="modal-map-header">
+            <a href="#" data-dismiss="modal" type="button" class="btn pull-right">Schließen</a>
+            <!--span class="inputfieldicon"></span>
+            <input type="text" name="mapsearch" id="mapsearch" class="mapsearch-search span6 search-query" data-provide="typeahead" placeholder="Suche">
+            <span class="inputfieldicon"><i class="icon-search"></i></span-->
+            <select id="streetsselect" class="span6">
+                <option></option>
+                {% for s in streets %}
+                    <option value='{{s.latlng|tojson|safe}}'>{{s.name}}</option>
+                {% endfor %}
+            </select>
         </div>
-        <div class="modal-body">
-            <div class="mapcontainer">
-                <div id="map"></div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <a href="#" data-dismiss="modal" class="btn">Schließen</a>
+        <div class="mapcontainer">
+            <div id="map"></div>
         </div>
     </div>
 
@@ -104,6 +107,8 @@
 {% block js %}
     <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
     <script src="{{url_for("static", filename="js/leaflet.draw.js")}}"></script>
+    <link href="{{url_for("static", filename="select2-3.4.2/select2.css")}}" rel="stylesheet"/>
+    <script src="{{url_for("static", filename="select2-3.4.2/select2.js")}}"></script>
     <script src="{{url_for("static", filename="js/edit_map.js")}}"></script>
     <script type="text/javascript">
         $(document).ready(function(){
