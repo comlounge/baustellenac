@@ -130,6 +130,7 @@ class BaustellenApp(Application):
         )[self.config.mongodb_name]
         self.config.dbs.baustellen = db.Sites(mydb.sites, app=self, config=self.config)
         self.config.dbs.traeger = db.Organisations(mydb.organisations, app=self, config=self.config)
+        self.config.dbs.streets = db.Streets(mydb.streets, app=self, config=self.config)
 
 
 def app(config, **local_config):
