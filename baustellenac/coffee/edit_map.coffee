@@ -11,8 +11,8 @@ $.fn.sites = (opts = {}) ->
     smarker = null
     drawControl = null
     drawnItems = null
-    polyline = null
-    spolyline = null
+    polylines = []
+    spolylines = []
 
     icon_default = L.icon(
         iconUrl: '/static/img/Under_construction_icon-red.svg',
@@ -36,7 +36,7 @@ $.fn.sites = (opts = {}) ->
 
     init = () ->
         init_icon()
-        init_marker_polyline()
+        init_marker_polylines()
         $('.showmap').click( (event)->
             $('#mapmodal').modal('show')
             if not map
@@ -87,8 +87,8 @@ $.fn.sites = (opts = {}) ->
             set_marker_latlng_to_form()
             set_static_marker()
             # set polyline form data
-            $('#polyline').val(JSON.stringify(polyline.getLatLngs()))
-            set_static_polyline()
+            set_polylines_latlngs_to_form()
+            set_static_polylines()
         )
 
     init_icon = () ->
@@ -97,7 +97,7 @@ $.fn.sites = (opts = {}) ->
         else
             icon = icon_default
 
-    init_marker_polyline = ()->
+    init_marker_polylines = ()->
         lat = $('#siteconfig').data('lat')
         lng = $('#siteconfig').data('lng')
         if lat? and lng?
@@ -105,12 +105,13 @@ $.fn.sites = (opts = {}) ->
                 draggable:true
                 icon:icon
             )
-        pl_latlngs = $('#siteconfig').data('polyline')
+        pl_latlngs = $('#siteconfig').data('polylines')
         if pl_latlngs?
-            polyline = L.polyline(pl_latlngs,
-                clickable: true
-                weight: 10
-            )
+            for pl in pl_latlngs
+                polylines.push(L.polyline(pl,
+                    clickable: true
+                    weight: 10
+                ))
 
     init_edit_map = ()->
         if marker?
@@ -131,8 +132,9 @@ $.fn.sites = (opts = {}) ->
         if marker?
             drawnItems.addLayer(marker)
         # draw polyline if found
-        if polyline?
-            drawnItems.addLayer(polyline)
+        if polylines?
+            for pl in polylines
+                drawnItems.addLayer(pl)
 
         map.addLayer(drawnItems)
         # Initialize the draw control and pass it the FeatureGroup of editable layers
@@ -158,10 +160,15 @@ $.fn.sites = (opts = {}) ->
                 marker = layer
                 layer.options.draggable = true
             if type == 'polyline'
-                #drawnItems.removeLayer(polyline)
-                polyline = layer
                 layer.options.weight = 10
+                polylines.push(layer)
             drawnItems.addLayer(layer)
+        )
+        map.on('draw:deleted', (e) ->
+            layers = e.layers
+            for k of layers._layers
+                # remove polyline from list
+                polylines = polylines.filter (p) -> p isnt layers._layers[k]
         )
 
     init_static_map = ()->
@@ -182,8 +189,8 @@ $.fn.sites = (opts = {}) ->
         }).addTo(staticmap)
         if marker?
             set_static_marker()
-        if polyline?
-            set_static_polyline()
+        if polylines?
+            set_static_polylines()
 
     set_static_marker = ()->
         if smarker != null
@@ -197,36 +204,33 @@ $.fn.sites = (opts = {}) ->
             staticmap.addLayer(smarker)
             staticmap.panTo(marker.getLatLng())
 
-    set_static_polyline = ()->
-        if spolyline?
-            staticmap.removeLayer(spolyline)
-        if polyline?
-            spolyline = L.polyline(polyline.getLatLngs(), weight:10);
-            staticmap.addLayer(spolyline)
+    set_static_polylines = ()->
+        if spolylines?
+            console.log spolylines
+            for sspl in spolylines
+                staticmap.removeLayer(sspl)
+            spolylines = []
+        if polylines?
+            for pl in polylines
+                spl =  L.polyline(pl.getLatLngs(), weight:10)
+                spolylines.push(spl)
+                staticmap.addLayer(spl)
 
     set_marker_latlng_to_form = ()->
         if marker?
             $('input[name=lat]').val(marker.getLatLng().lat)
             $('input[name=lng]').val(marker.getLatLng().lng)
 
+    set_polylines_latlngs_to_form = ()->
+        latlngs = [pl.getLatLngs() for pl in polylines]
+        $('#polylines').val(JSON.stringify(latlngs))
 
     $(this).each(init)
     this
 
-
-$.fn.mapsearch = (opts = {}) ->
-
-    $this = $(this)
-
-    init = () ->
-
-    $(this).each(init)
-    this
 
 
 $(document).ready( () ->
-
-    $("#streetsselect").mapsearch()
 
     $("body").sites()
 

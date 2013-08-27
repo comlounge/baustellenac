@@ -8,15 +8,15 @@
     <div id="siteconfig"
          data-lat="{{site.lat}}"
          data-lng="{{site.lng}}"
-         data-polyline='{{site.polyline|tojson|safe}}'
+         data-polylines='{{site.polylines|tojson|safe}}'
          data-sidewalk_only="{{site.sidewalk_only}}"></div>
 {% endblock %}
 
 {% block hidden_iputs %}
     <input id="lat" name="lat" type="hidden" value="{{site.lat}}">
     <input id="lng" name="lng" type="hidden" value="{{site.lng}}">
-    <input id="polyline"
-           name="polyline"
+    <input id="polylines"
+           name="polylines"
            type="hidden"
-           value='{{site.polyline|tojson|safe}}'>
+           value='{{site.polylines|tojson|safe}}'>
 {% endblock %}
