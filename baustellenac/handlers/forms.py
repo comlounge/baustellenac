@@ -131,4 +131,4 @@ class SiteForm(BaseForm):
     approx_timeframe = TextField(u"ungefährer Zeitraum", default="")
     lat = HiddenField(default='')
     lng = HiddenField(default='')
-    polyline = JSONField(u'Polyline', default={}, widget=HiddenInput())
+    polylines = JSONField(u'Polylines', default={}, widget=HiddenInput())

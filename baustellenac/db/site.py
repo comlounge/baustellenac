@@ -37,6 +37,9 @@ class LatLngSchema(Schema):
     lat = Float()
     lng = Float()
 
+class LatLngListSchema(Schema):
+    latlngs = List(LatLngSchema())
+
 class SiteSchema(Schema):
     """main schema for a street construction site"""
 
@@ -62,13 +65,15 @@ class SiteSchema(Schema):
     lat                 = String()
     lng                 = String()
 
-    # the drawable line
-    polyline            = List(LatLngSchema(), required = False)
+    # the drawable lines
+    #polyline            = List(LatLngSchema(), required = False)
+    polylines           = List(List(LatLngSchema()), required = False)
+    #polylines           = List(LatLngListSchema(), required = False)
 
     # shows if we have exact lat/lng
     exact_position = Boolean()
 
-    sections            = List(SectionSchema()) # list of sections/streets. Only one if it's only one location
+    #sections            = List(SectionSchema()) # list of sections/streets. Only one if it's only one location
 
 class Site(Record):
 

@@ -30,7 +30,7 @@ class SiteAddView(BaseHandler):
     @logged_in()
     def get(self):
         """render the view"""
-        form = SiteForm()
+        form = SiteForm(self.request.form)
         organisations = [(o.name,o.name) for o in self.config.dbs.traeger.find().sort('name')]
         form.organisation.choices = organisations
         if self.request.method == 'POST' and form.validate():
