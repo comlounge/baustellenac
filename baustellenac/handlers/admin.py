@@ -16,7 +16,7 @@ class Overview(BaseHandler):
     def get(self):
         """render the view"""
         return self.render(
-            sites = self.config.dbs.baustellen.find().sort("name", 1),
+            sites = self.config.dbs.baustellen.find().sort("name"),
         )
     post = get
 
