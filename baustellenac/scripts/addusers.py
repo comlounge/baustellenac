@@ -16,6 +16,11 @@ class AddUsers(ScriptBase):
             'fullname' : 'Christian Scholz',
             'password' : 'admin'
         }, force = True, create_pw = False)
+        self.app.module_map['userbase'].register({
+            'email' : 'klaus.dosch',
+            'fullname' : 'Klaus Dosch',
+            'password' : 'kdadmin'
+        }, force = True, create_pw = False)
 
 
 
