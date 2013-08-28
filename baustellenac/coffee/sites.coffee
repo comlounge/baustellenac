@@ -9,7 +9,7 @@ $.fn.sites = (opts = {}) ->
         zoom: map_zoom
     )
     markers = {}
-    polyline = null
+    polylines = []
     icon_default = L.icon(
         iconUrl: '/static/img/Under_construction_icon-red.svg',
         iconSize: [38, 38],
@@ -44,7 +44,7 @@ $.fn.sites = (opts = {}) ->
                 map.panTo(markers[$(this).data('id')].getLatLng(), {'animate':true})
                 map.setZoom(current_zoom, {'animate':true})
                 markers[$(this).data('id')].openPopup()
-            show_polyline($(this))
+            show_polylines($(this))
         )
         #$('.site').on('mouseout', on_site_out)
         #$('.site').click(() ->
@@ -134,9 +134,8 @@ $.fn.sites = (opts = {}) ->
             markers[elem.data('id')] = marker
             marker.bindPopup(make_infopopup(elem))
             marker.on('click', ()->
-                show_polyline(elem)
+                show_polylines(elem)
             )
-            #marker.on('mouseout', remove_polyline)
 
 
     make_infopopup = (elem) ->
@@ -168,25 +167,21 @@ $.fn.sites = (opts = {}) ->
             ,
         )
 
-    show_polyline = (elem) ->
-        remove_polyline()
-        pl_latlngs = elem.data('polyline')
+    show_polylines = (elem) ->
+        remove_polylines()
+        pl_latlngs = elem.data('polylines')
         if pl_latlngs
-            polyline = L.polyline(pl_latlngs,
-                clickable: true
-            ).addTo(map)
+            for plll in pl_latlngs
+                pl = L.polyline(plll,
+                    weight: 10
+                )
+                polylines.push(pl)
+                map.addLayer(pl)
 
-    on_site_over = (elem, marker) ->
-        #for k of markers
-        #    if markers[k] != marker
-        #        markers[k].setOpacity(0.5)
-        show_polyline(elem)
-
-    remove_polyline = ()->
-        #for k of markers
-        #    markers[k].setOpacity(1)
-        if polyline and map.hasLayer(polyline)
-            map.removeLayer(polyline)
+    remove_polylines = ()->
+        for pl in polylines
+            if map.hasLayer(pl)
+                map.removeLayer(pl)
 
     $(this).each(init)
     this
