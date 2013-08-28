@@ -17,7 +17,7 @@ class AddUsers(ScriptBase):
             'password' : 'admin'
         }, force = True, create_pw = False)
         self.app.module_map['userbase'].register({
-            'email' : 'klaus.dosch',
+            'email' : 'dosch@aachener-stiftung.de',
             'fullname' : 'Klaus Dosch',
             'password' : 'kdadmin'
         }, force = True, create_pw = False)
