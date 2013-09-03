@@ -43,7 +43,8 @@
     <script type="text/javascript">
         $(document).ready(function(){
             $('.site-remove-form').submit(function(){
-                if (confirm('Baustelle '+$(this).data('name')+' wirklich löschen?')){
+                row = $(this).parents('tr');
+                if (confirm('Baustelle '+$(row).data('name')+' wirklich löschen?')){
                     return true;
                 } else {
                     return false;
