@@ -12,10 +12,10 @@
 
     <h3>Liste aller Baustellen</h3>
     <div class="row">
-        <div class="span6">
+        <div class="span8">
             <table class="table table-striped">
                 {% for site in sites %}
-                    <tr>
+                    <tr data-name="{{site.name}}">
                         <td class="span4">
                             {{site.name}} <span class="muted">({{site.approx_timeframe}})</span>
                         </td>
@@ -27,6 +27,11 @@
                         <td class="span2">
                             <a href="{{url_for('site_edit', site_id=site._id)}}" class="btn btn-mini"><i class="icon-edit"></i> bearbeiten</a>
                         </td>
+                        <td class="span1">
+                            <form name="site-remove-form" class="site-remove-form" action="{{url_for('site_remove', site_id=site._id)}}" method="POST">
+                                <button type="submit" class="pull-right remove-site btn btn-mini btn-danger"><i class="icon-white icon-trash"></i></button>
+                            </form>
+                        </td>
                     </tr>
                 {% endfor %}
             </table>
@@ -35,6 +40,15 @@
 {% endblock %}
 
 {% block js %}
-    <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
-    <script src="{{url_for("static", filename="js/sites.js")}}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.site-remove-form').submit(function(){
+                if (confirm('Baustelle '+$(this).data('name')+' wirklich löschen?')){
+                    return true;
+                } else {
+                    return false;
+                };
+            });
+        });
+    </script>
 {% endblock %}
