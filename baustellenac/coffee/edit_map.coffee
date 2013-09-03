@@ -222,7 +222,9 @@ $.fn.sites = (opts = {}) ->
             $('input[name=lng]').val(marker.getLatLng().lng)
 
     set_polylines_latlngs_to_form = ()->
-        latlngs = [pl.getLatLngs() for pl in polylines]
+        latlngs = []
+        for pl in polylines
+            latlngs.push(pl.getLatLngs())
         $('#polylines').val(JSON.stringify(latlngs))
 
     $(this).each(init)
