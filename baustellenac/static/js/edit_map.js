@@ -260,18 +260,12 @@ $.fn.sites = function(opts) {
     }
   };
   set_polylines_latlngs_to_form = function() {
-    var latlngs, pl;
-    latlngs = [
-      (function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = polylines.length; _i < _len; _i++) {
-          pl = polylines[_i];
-          _results.push(pl.getLatLngs());
-        }
-        return _results;
-      })()
-    ];
+    var latlngs, pl, _i, _len;
+    latlngs = [];
+    for (_i = 0, _len = polylines.length; _i < _len; _i++) {
+      pl = polylines[_i];
+      latlngs.push(pl.getLatLngs());
+    }
     return $('#polylines').val(JSON.stringify(latlngs));
   };
   $(this).each(init);
