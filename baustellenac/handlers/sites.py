@@ -38,6 +38,7 @@ class SiteAddView(BaseHandler):
             f = form.data
             site_data = {}
             site_data.update(f)
+            site_data['edit_history'] = [{'user':self.user['username'], 'date':datetime.datetime.now()}]
             site = db.Site(site_data)
             del site['_id']
             self.config.dbs.baustellen.put(site)
