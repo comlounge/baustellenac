@@ -72,3 +72,17 @@ class SiteEditView(BaseHandler):
             streets = self.config.dbs.streets.find()
         )
     post = get
+
+class SiteRemoveView(BaseHandler):
+    """processes a delete request vie post calledby ajax"""
+
+    @logged_in()
+    def post(self, site_id):
+        """render the view"""
+        site = self.config.dbs.baustellen.get(site_id)
+        try:
+            self.config.dbs.baustellen.remove(site)
+            self.flash(self._(u"Baustelle <i>%s</i> erfolgreich gelöscht" %site.name), category="info")
+        except:
+            self.flash(self._(u"Baustelle <i>%s</i> konnte nicht gelöscht werden" %site.name), category="danger")
+        return redirect(self.url_for("admin_overview"))

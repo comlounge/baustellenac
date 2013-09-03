@@ -109,6 +109,7 @@ class BaustellenApp(Application):
         URL('/sites', 'sites', handlers.sites.SitesView),
         URL('/site/add', 'site_add', handlers.sites.SiteAddView),
         URL('/site/<site_id>/edit', 'site_edit', handlers.sites.SiteEditView),
+        URL('/site/<site_id>/remove', 'site_remove', handlers.sites.SiteRemoveView),
 
         # organisation
         URL('/organisation/add', 'organisation_add', handlers.admin.OrganisationAdd),
