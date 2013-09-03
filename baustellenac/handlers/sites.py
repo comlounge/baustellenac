@@ -1,6 +1,7 @@
 #encoding=utf8
 
 import pymongo
+import datetime
 import uuid
 import json
 
@@ -63,6 +64,7 @@ class SiteEditView(BaseHandler):
         if self.request.method == 'POST' and form.validate():
             f = form.data
             site.update(f)
+            site.edit_history.append({'user':self.user['username'], 'date':datetime.datetime.now()})
             self.config.dbs.baustellen.put(site)
             self.flash(self._(u"Baustellen %s aktualisiert" %site.name), category="info")
             return redirect(self.url_for("admin_overview"))

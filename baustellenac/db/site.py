@@ -40,6 +40,10 @@ class LatLngSchema(Schema):
 class LatLngListSchema(Schema):
     latlngs = List(LatLngSchema())
 
+class EditSchema(Schema):
+    user = String()
+    date = DateTime()
+
 class SiteSchema(Schema):
     """main schema for a street construction site"""
 
@@ -72,6 +76,9 @@ class SiteSchema(Schema):
 
     # shows if we have exact lat/lng
     exact_position = Boolean()
+
+    # editor history
+    edit_history = List(EditSchema(), default=[])
 
     #sections            = List(SectionSchema()) # list of sections/streets. Only one if it's only one location
 

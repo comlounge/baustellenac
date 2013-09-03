@@ -20,3 +20,18 @@
            type="hidden"
            value='{{site.polylines|tojson|safe}}'>
 {% endblock %}
+
+{% block history %}
+    {% if site.edit_history|length > 0 %}
+        <div class="span2 well pull-right" style="height:570px;">
+            <h5>Bearbeitungshistorie</h5>
+            <div style="height:530px; overflow-y:auto">
+                <ul class="unstyled">
+                {% for his in site.edit_history %}
+                    <li style="padding-bottom:5px">{{ his.date.strftime('%d.%m.%Y %H:%M')}} <div class="muted">{{his.user}}</div></li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
