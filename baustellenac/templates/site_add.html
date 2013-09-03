@@ -46,60 +46,64 @@
         <h3>neue Baustelle anlegen</h3>
     {% endblock %}
     <div class="row">
+        <div class="span8">
 
-        <form method="POST" action="{{url}}" id="site-form" class="form-horizontal validate">
-            {% block site_config %}
-            {% endblock %}
-            <fieldset>
-                <!--legend>Kerndaten</legend-->
-                {% block hidden_iputs %}
-                    <input id="lat" name="lat" type="hidden" value="">
-                    <input id="lng" name="lng" type="hidden" value="">
-                    <input id="polylines"
-                           name="polylines"
-                           type="hidden"
-                           value='[]'>
+            <form method="POST" action="{{url}}" id="site-form" class="form-horizontal validate">
+                {% block site_config %}
                 {% endblock %}
-                {{ macros.form_field(form.name, class="required large span6") }}
-                {{ macros.form_field(form.subtitle, class="required span6") }}
-                {{ macros.form_field(form.description, class="required span6") }}
-                <div class="pull-right span6">
-                <button type="button"
-                        id="organisation_add_button"
-                        class="btn btn-success pull-left"
-                        title="neuen Träger hinzufügen">
-                    <i class="icon-white icon-plus"></i>
-                </button>
-                </div>
-                {{ macros.form_field(form.organisation, class="required span4") }}
-                {{ macros.form_field(form.start_date, class="span2") }}
-                {{ macros.form_field(form.end_date, class="span2") }}
-                {{ macros.form_field(form.approx_timeframe, class="span6") }}
-                {{ macros.form_field(form.sidewalk_only) }}
-            </fieldset>
-            <fieldset>
-                <!--legend>Geodaten</legend-->
-                <div class="control-group " id="field-latlng">
-                    <label class="control-label" for="latlng">Karte</label>
-                    <div class="controls" id="latlng-div">
-                        <div class="input">
-                            <div class="staticmapcontainer pull-left">
-                                <div id="staticmap">
+                <fieldset>
+                    <!--legend>Kerndaten</legend-->
+                    {% block hidden_iputs %}
+                        <input id="lat" name="lat" type="hidden" value="">
+                        <input id="lng" name="lng" type="hidden" value="">
+                        <input id="polylines"
+                               name="polylines"
+                               type="hidden"
+                               value='[]'>
+                    {% endblock %}
+                    {{ macros.form_field(form.name, class="required large span6") }}
+                    {{ macros.form_field(form.subtitle, class="required span6") }}
+                    {{ macros.form_field(form.description, class="required span6") }}
+                    <div class="pull-right span2">
+                    <button type="button"
+                            id="organisation_add_button"
+                            class="btn btn-success pull-left"
+                            title="neuen Träger hinzufügen">
+                        <i class="icon-white icon-plus"></i>
+                    </button>
+                    </div>
+                    {{ macros.form_field(form.organisation, class="required span4") }}
+                    {{ macros.form_field(form.start_date, class="span2") }}
+                    {{ macros.form_field(form.end_date, class="span2") }}
+                    {{ macros.form_field(form.approx_timeframe, class="span6") }}
+                    {{ macros.form_field(form.sidewalk_only) }}
+                </fieldset>
+                <fieldset>
+                    <!--legend>Geodaten</legend-->
+                    <div class="control-group " id="field-latlng">
+                        <label class="control-label" for="latlng">Karte</label>
+                        <div class="controls" id="latlng-div">
+                            <div class="input">
+                                <div class="staticmapcontainer pull-left">
+                                    <div id="staticmap">
+                                    </div>
                                 </div>
+                                <a href="#" class="btn showmap">bearbeiten</a>
                             </div>
-                            <a href="#" class="btn showmap">bearbeiten</a>
                         </div>
                     </div>
-                </div>
-            </fieldset>
-            <fieldset>
-                <div class="form-actions">
-                    <input type="submit" class="btn btn-primary" value="Speichern">
-                    <a href="{{url_for('admin_overview')}}" class="btn">Abbrechen</a>
-                </div>
-            </fieldset>
-        </form>
+                </fieldset>
+                <fieldset>
+                    <div class="form-actions">
+                        <input type="submit" class="btn btn-primary" value="Speichern">
+                        <a href="{{url_for('admin_overview')}}" class="btn">Abbrechen</a>
+                    </div>
+                </fieldset>
+            </form>
 
+        </div>
+        {% block history %}
+        {% endblock %}
     </div>
 
 {% endblock %}
