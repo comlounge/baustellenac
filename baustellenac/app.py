@@ -5,6 +5,7 @@ import pkg_resources
 
 from starflyer import Application, URL, AttributeMapper
 import userbase
+from sfext.mail import mail_module
 
 import re
 from jinja2 import evalcontextfilter, Markup, escape
@@ -96,6 +97,7 @@ class BaustellenApp(Application):
                 'registration_success'  : {'endpoint' : 'userbase.login'},
             },
         ),
+        mail_module(debug=True),
     ]
 
     jinja_filters = {
