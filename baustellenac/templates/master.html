@@ -42,6 +42,18 @@
                             <li><a href="/" target="_blank">Karte</a></li>
                         </ul>
                     </div><!--/.nav-collapse -->
+                    {% if logged_in %}
+                    <div class="nav-collapse">
+                        <ul class="nav pull-right">
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" href="#" data-toggle="dropdown"><i class="icon-wrench"></i> {{user.username}}<strong class="caret"></strong></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{url_for('userbase.logout')}}"><i class="icon-signout"></i> Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -93,9 +105,9 @@
     <script src="{{url_for("static", filename="js/bootstrap-modal.js")}}"></script>
     <script src="{{url_for("static", filename="js/jquery.ui.min.js")}}"></script>
     <script src="{{url_for("static", filename="js/bootstrap-tooltip.js")}}"></script>
+    <script src="{{url_for("static", filename="js/bootstrap-dropdown.js")}}"></script>
 
     {#
-        <script src="{{url_for("static", filename="js/bootstrap-dropdown.js")}}"></script>
         <script src="{{url_for("static", filename="js/bootstrap-transition.js")}}"></script>
         <script src="{{url_for("static", filename="js/bootstrap-button.js")}}"></script>
         <script src="{{url_for("static", filename="js/bootstrap-tab.js")}}"></script>
