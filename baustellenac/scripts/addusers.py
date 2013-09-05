@@ -52,9 +52,11 @@ class AddUsers(ScriptBase):
             pw = u.create_pw()
             u.save()
 
-            txt = MAIL_TEMPLATE % {'un':username, 'pw':pw}
-            mailer = self.app.module_map['mail']
-            mailer.mail(username, 'Ihr Zugang zum Baustellen-Projekt', txt)
+            print '%s %s' % (username, pw)
+
+            #txt = MAIL_TEMPLATE % {'un':username, 'pw':pw}
+            #mailer = self.app.module_map['mail']
+            #mailer.mail(username, 'Ihr Zugang zum Baustellen-Projekt', txt)
 
     def extend_parser(self):
         """add the location of the file to the parser"""
