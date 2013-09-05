@@ -79,6 +79,11 @@ class BaustellenApp(Application):
         4 : "NetAachen"
     }
 
+    cities = {
+        'aachen' : u'Aachen',
+        'wurselen' : u'Würselen'
+    }
+
     modules = [
         userbase.email_userbase(
             url_prefix                  = "/users",
@@ -134,6 +139,8 @@ class BaustellenApp(Application):
         self.config.dbs.baustellen = db.Sites(mydb.sites, app=self, config=self.config)
         self.config.dbs.traeger = db.Organisations(mydb.organisations, app=self, config=self.config)
         self.config.dbs.streets = db.Streets(mydb.streets, app=self, config=self.config)
+
+        self.config.cities = self.cities
 
 
 def app(config, **local_config):

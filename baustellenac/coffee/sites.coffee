@@ -92,6 +92,9 @@ $.fn.sites = (opts = {}) ->
         desc = $('<div class="row"></div>')
             .append('<div class="span2">Beschreibung</div>')
             .append('<div class="span4">'+data['description']+'</div>')
+        city = $('<div class="row"></div>')
+            .append('<div class="span2">Stadt</div>')
+            .append('<div class="span4">'+data['city']+'</div>')
         organisation = $('<div class="row"></div>')
             .append('<div class="span2">Träger</div>')
             .append('<div class="span4">'+data['organisation']+'</div>')
@@ -115,6 +118,7 @@ $.fn.sites = (opts = {}) ->
         m.find('.modal-body')
             .append(subtitle)
             .append(desc)
+            .append(city)
             .append(organisation)
             .append(approx_time)
             .append(start_time)
@@ -147,6 +151,7 @@ $.fn.sites = (opts = {}) ->
             info += elem.data('subtitle')+'<br/><br/>'
         else
             info += '<br/>'
+        info += 'Stadt: '+elem.data('city')+'<br/>'
         info += 'Träger: '+elem.data('organisation')+'<br/>'
         info += 'Vorr. Dauer: '+elem.data('approx_timeframe')+'<br/><br/>'
         info += '<button class="moreinfo" type="button" data-id="'+elem.data('id')+'">Mehr Informationen</button>'
