@@ -56,6 +56,7 @@ class SiteSchema(Schema):
     subtitle            = String(required = False) # project name or something like that
     description         = String(required = False) # long description if given
     organisation        = String() # who is doing this?
+    city                = String()
     sidewalk_only       = Boolean() # is this on a sidewalk only?
 
     # these field define when to show it on the map

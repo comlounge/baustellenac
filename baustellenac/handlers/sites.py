@@ -34,6 +34,7 @@ class SiteAddView(BaseHandler):
         form = SiteForm(self.request.form)
         organisations = [(o.name,o.name) for o in self.config.dbs.traeger.find().sort('name')]
         form.organisation.choices = organisations
+        form.city.choices = [(k,v) for k,v in self.config.cities.items()]
         if self.request.method == 'POST' and form.validate():
             f = form.data
             site_data = {}
@@ -62,6 +63,7 @@ class SiteEditView(BaseHandler):
         form = SiteForm(self.request.form, obj=site)
         organisations = [(o.name,o.name) for o in self.config.dbs.traeger.find().sort('name')]
         form.organisation.choices = organisations
+        form.city.choices = [(k,v) for k,v in self.config.cities.items()]
         if self.request.method == 'POST' and form.validate():
             f = form.data
             site.update(f)

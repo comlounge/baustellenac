@@ -83,12 +83,13 @@ $.fn.sites = function(opts) {
     });
   };
   create_infomodal = function(data) {
-    var approx_time, body, desc, end_date, end_time, m, organisation, start_date, start_time, subtitle;
+    var approx_time, body, city, desc, end_date, end_time, m, organisation, start_date, start_time, subtitle;
     m = $('#infomodal');
     m.find('.modal-header h3').html(data['name']);
     body = "";
     subtitle = $('<div class="row"></div>').append('<div class="span2">Untertitel</div>').append('<div class="span4">' + data['subtitle'] + '</div>');
     desc = $('<div class="row"></div>').append('<div class="span2">Beschreibung</div>').append('<div class="span4">' + data['description'] + '</div>');
+    city = $('<div class="row"></div>').append('<div class="span2">Stadt</div>').append('<div class="span4">' + data['city'] + '</div>');
     organisation = $('<div class="row"></div>').append('<div class="span2">Träger</div>').append('<div class="span4">' + data['organisation'] + '</div>');
     approx_time = $('<div class="row"></div>').append('<div class="span2">Vorr. Zeitrahmen</div>').append('<div class="span4">' + data['approx_timeframe'] + '</div>');
     start_date = new Date(data['start_date']);
@@ -96,7 +97,7 @@ $.fn.sites = function(opts) {
     end_date = new Date(data['end_date']);
     end_time = $('<div class="row"></div>').append('<div class="span2">Ende</div>').append('<div class="span4">' + end_date.toLocaleDateString('de') + '</div>');
     m.find('.modal-body').html('');
-    return m.find('.modal-body').append(subtitle).append(desc).append(organisation).append(approx_time).append(start_time).append(end_time);
+    return m.find('.modal-body').append(subtitle).append(desc).append(city).append(organisation).append(approx_time).append(start_time).append(end_time);
   };
   make_marker = function(elem) {
     var icon, lat, lng, marker;
@@ -129,6 +130,7 @@ $.fn.sites = function(opts) {
     } else {
       info += '<br/>';
     }
+    info += 'Stadt: ' + elem.data('city') + '<br/>';
     info += 'Träger: ' + elem.data('organisation') + '<br/>';
     info += 'Vorr. Dauer: ' + elem.data('approx_timeframe') + '<br/><br/>';
     info += '<button class="moreinfo" type="button" data-id="' + elem.data('id') + '">Mehr Informationen</button>';
