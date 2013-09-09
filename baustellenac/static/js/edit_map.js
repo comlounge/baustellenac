@@ -102,7 +102,7 @@ $.fn.sites = function(opts) {
     var lat, lng, pl, pl_latlngs, _i, _len, _results;
     lat = $('#siteconfig').data('lat');
     lng = $('#siteconfig').data('lng');
-    if ((lat != null) && (lng != null)) {
+    if (lat !== '' && lng !== '') {
       marker = L.marker([lat, lng], {
         draggable: true,
         icon: icon
