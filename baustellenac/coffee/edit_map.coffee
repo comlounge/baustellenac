@@ -100,7 +100,7 @@ $.fn.sites = (opts = {}) ->
     init_marker_polylines = ()->
         lat = $('#siteconfig').data('lat')
         lng = $('#siteconfig').data('lng')
-        if lat? and lng?
+        if lat!='' and lng!=''
             marker = L.marker([lat,lng],
                 draggable:true
                 icon:icon
