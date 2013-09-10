@@ -20,5 +20,9 @@ class Site(BaseHandler):
     def get(self, site_id):
         """render the view"""
         #print self.config.dbs.baustellen.get(site_id)
-        return self.config.dbs.baustellen.get(site_id)
+        #return self.config.dbs.baustellen.get(site_id)
+        return {
+            'site' : self.config.dbs.baustellen.get(site_id),
+            'city_names' : self.config.cities
+        }
     post = get

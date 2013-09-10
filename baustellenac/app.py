@@ -81,6 +81,14 @@ class BaustellenApp(Application):
 
     cities = {
         'aachen' : u'Aachen',
+        'alsdorf' : u'Alsdorf',
+        'baesweiler' : u'Baesweiler',
+        'eschweiler' : u'Eschweiler',
+        'herzogenrath' : u'Herzogenrath',
+        'monschau' : u'Monschau',
+        'roetgen' : u'Roetgen',
+        'simmerath' : u'Simmerath',
+        'stolberg' : u'Stolberg',
         'wurselen' : u'Würselen'
     }
 
