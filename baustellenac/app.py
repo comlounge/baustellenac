@@ -88,6 +88,8 @@ class BaustellenApp(Application):
     routes = [
         URL('/', 'index', handlers.index.IndexView),
         URL('/impressum.html', 'impressum', handlers.index.Impressum),
+        URL('/sites', 'sites', handlers.sites.SitesView),
+        URL('/site/<site_id>/edit', 'site_edit', handlers.sites.SiteEditView),
 
         # api
         URL('/api/sites.json', 'api_all_sites', handlers.api.AllSites),

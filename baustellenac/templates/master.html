@@ -20,6 +20,7 @@
         <link href="{{url_for("static", filename="css/main.css")}}" rel="stylesheet">
         <link rel="shortcut icon" href="{{url_for("static", filename="img/favicon.ico")}}" type="image/x-icon">
         <link rel="icon" href="{{url_for("static", filename="img/favicon.ico")}}" type="image/x-icon">
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 
         {% endblock %}
         {% block head %}
@@ -54,6 +55,8 @@
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="{{url_for("static", filename="js/jquery.min.js")}}"></script>
+        <script src="{{url_for("static", filename="js/jquery.ui.datepicker-de.js")}}"></script>
+
         {% block js %}
         {% endblock %}
         {% block js2 %}
@@ -73,6 +76,9 @@
         
 
         <script src="{{url_for("static", filename="js/bootstrap-modal.js")}}"></script>
+        <script src="{{url_for("static", filename="js/jquery.ui.min.js")}}"></script>
+        <script src="{{url_for("static", filename="js/bootstrap-tooltip.js")}}"></script>
+
         {#
             <script src="{{url_for("static", filename="js/bootstrap-dropdown.js")}}"></script>
             <script src="{{url_for("static", filename="js/bootstrap-transition.js")}}"></script>

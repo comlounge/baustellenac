@@ -54,6 +54,9 @@ class SiteSchema(Schema):
     # this field describes an approx. time frame in plain text
     approx_timeframe    = String()
 
+    # shows if we have exact lat/lng
+    exact_position = Boolean()
+
     sections            = List(SectionSchema()) # list of sections/streets. Only one if it's only one location
 
 class Site(Record):

@@ -1,6 +1,7 @@
 #coding: utf-8
 
 import re
+import time
 import csv
 import datetime
 import requests
@@ -38,9 +39,10 @@ class ImportData(ScriptBase):
                     if d['Ende genau'].strip():
                         site_data['end_date'] = datetime.datetime.strptime(d['Ende genau'], '%d.%m.%Y')
 
-                    sections = self.get_sections(d)
+                    sections, exact_position = self.get_sections(d)
                     if len(sections) > 0:
-                        site_data['sections'] = self.get_sections(d)
+                        site_data['sections'] = sections
+                        site_data['exact_position'] = exact_position
                         site = Site(site_data)
                         del site['_id']
                         self.app.config.dbs.baustellen.save(site)
@@ -49,6 +51,7 @@ class ImportData(ScriptBase):
     def get_sections(self, d):
         sections = []
         streets_string = d['Strassen']
+        exact_position = True
 
         # check for sub_streets (intersections)
         sub_streets = []
@@ -74,7 +77,7 @@ class ImportData(ScriptBase):
                 #'start_lat'    : latlngs[0]['lat'],
                 #'start_lng'    : latlngs[0]['lng'],
             }
-            start_latlng = self.get_gm_latlng(streets[0]['name'])
+            start_latlng, exact_position = self.get_gm_latlng(streets[0]['name'])
             if start_latlng is not None:
                 section['start_lat'] = start_latlng['lat']
                 section['start_lng'] = start_latlng['lng']
@@ -104,20 +107,20 @@ class ImportData(ScriptBase):
                     'city'         : u'Aachen',
                     'zip'          : u'52064', # TODO: determine correct ZIP
                 }
-                start_latlng = self.get_gm_latlng(s['name'], s['number'][0])
+                start_latlng, exact_position = self.get_gm_latlng(s['name'], s['number'][0])
                 if start_latlng is not None:
                     section['start_lat'] = start_latlng['lat']
                     section['start_lng'] = start_latlng['lng']
                 if len(s['number']) > 1:
                     section['end_number'] = s['number'][1]
-                    end_latlng = self.get_gm_latlng(s['name'], s['number'][1])
+                    end_latlng, exact_position = self.get_gm_latlng(s['name'], s['number'][1])
                     if end_latlng is not None:
                         section['end_lat'] = end_latlng['lat']
                         section['end_lng'] = end_latlng['lng']
 
                 sections.append(section)
 
-        return sections
+        return (sections, exact_position)
 
         #for s in d['Strassen'].split(','):
         #
@@ -130,8 +133,16 @@ class ImportData(ScriptBase):
         url = gm_url %query
         data = requests.get(url).json()
         if len(data['results']) > 0:
-            return data['results'][0]['geometry']['location']
-        return None
+            # check if geodata is correct by checking 'formatted_address'
+            # if 'formatted_address' is of format 'Aachen, Germany', that means
+            # the exact location was not found and the center of the city was
+            # returned
+            exact = True
+            if len(data['results'][0]['formatted_address'].split(',')) == 2:
+                exact = False
+            return (data['results'][0]['geometry']['location'], exact)
+        time.sleep(3)
+        return (None, None)
 
     def get_osm_latlng(self, street, number=None):
         url = osm_url %(street, number)

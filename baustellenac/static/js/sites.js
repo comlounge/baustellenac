@@ -33,8 +33,11 @@ $.fn.sites = function(opts) {
     $('.site').each(function() {
       return make_marker($(this));
     });
-    $('.site').click(function() {
+    $('.site').mouseover(function() {
       return markers[$(this).data('id')].openPopup();
+    });
+    $('.site').click(function() {
+      return show_infomodal($(this).data('id'));
     });
     map.locate({
       setView: true,
