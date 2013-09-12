@@ -9,7 +9,7 @@ class AllSites(BaseHandler):
     @asjson()
     def get(self):
         """render the view"""
-        return list(self.config.dbs.baustellen.find())
+        return list(self.config.dbs.baustellen.active_sites)
     post = get
 
 

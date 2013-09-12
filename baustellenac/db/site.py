@@ -92,3 +92,8 @@ class Sites(Collection):
 
     data_class = Site
     create_ids = True
+
+    @property
+    def active_sites(self):
+        now = datetime.datetime.now()
+        return self.find({'start_date':{'$lte':now}, 'end_date':{'$gte':now}}).sort("name", 1)

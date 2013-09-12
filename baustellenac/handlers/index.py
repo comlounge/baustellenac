@@ -14,7 +14,7 @@ class IndexView(BaseHandler):
         """render the view"""
         now = datetime.now()
         return self.render(
-            sites = self.config.dbs.baustellen.find({'start_date':{'$lte':now}, 'end_date':{'$gte':now}}).sort("name", 1),
+            sites = self.config.dbs.baustellen.active_sites
         )
     post = get
 
