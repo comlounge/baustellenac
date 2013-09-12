@@ -23,6 +23,7 @@
                 {% for site in sites %}
                     <tr data-name="{{site.name}}">
                         <td class="span4">
+                            {% if site.city %} <div>{{config.cities.get(site.city,'')}} </div>{% endif %}
                             {{site.name}} <span class="muted">({{site.approx_timeframe}})</span>
                         </td>
                         <!--td class="span1">
