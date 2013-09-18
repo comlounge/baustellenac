@@ -4,6 +4,8 @@ import pymongo
 import pkg_resources
 
 from starflyer import Application, URL, AttributeMapper
+import userbase
+from sfext.mail import mail_module
 
 import re
 from jinja2 import evalcontextfilter, Markup, escape
@@ -77,7 +79,38 @@ class BaustellenApp(Application):
         4 : "NetAachen"
     }
 
+    cities = {
+        'aachen' : u'Aachen',
+        'alsdorf' : u'Alsdorf',
+        'baesweiler' : u'Baesweiler',
+        'eschweiler' : u'Eschweiler',
+        'herzogenrath' : u'Herzogenrath',
+        'monschau' : u'Monschau',
+        'roetgen' : u'Roetgen',
+        'simmerath' : u'Simmerath',
+        'stolberg' : u'Stolberg',
+        'wurselen' : u'Würselen'
+    }
+
     modules = [
+        userbase.email_userbase(
+            url_prefix                  = "/users",
+            mongodb_name                = "baustellenac",
+            master_template             = "master.html",
+            login_after_registration    = False,
+            double_opt_in               = True,
+            enable_registration         = True,
+            use_html_mail               = False,
+            urls                        = {
+                'activation'            : {'endpoint' : 'userbase.activate'},
+                'activation_success'    : {'endpoint' : 'admin_overview'},
+                'activation_code_sent'  : {'endpoint' : 'userbase.activate'},
+                'login_success'         : {'endpoint' : 'admin_overview'},
+                'logout_success'        : {'endpoint' : 'userbase.login'},
+                'registration_success'  : {'endpoint' : 'userbase.login'},
+            },
+        ),
+        mail_module(debug=True),
     ]
 
     jinja_filters = {
@@ -89,7 +122,15 @@ class BaustellenApp(Application):
         URL('/', 'index', handlers.index.IndexView),
         URL('/impressum.html', 'impressum', handlers.index.Impressum),
         URL('/sites', 'sites', handlers.sites.SitesView),
+        URL('/site/add', 'site_add', handlers.sites.SiteAddView),
         URL('/site/<site_id>/edit', 'site_edit', handlers.sites.SiteEditView),
+        URL('/site/<site_id>/remove', 'site_remove', handlers.sites.SiteRemoveView),
+
+        # organisation
+        URL('/organisation/add', 'organisation_add', handlers.admin.OrganisationAdd),
+
+        # admin
+        URL('/admin', 'admin_overview', handlers.admin.Overview),
 
         # api
         URL('/api/sites.json', 'api_all_sites', handlers.api.AllSites),
@@ -104,6 +145,10 @@ class BaustellenApp(Application):
             self.config.mongodb_port
         )[self.config.mongodb_name]
         self.config.dbs.baustellen = db.Sites(mydb.sites, app=self, config=self.config)
+        self.config.dbs.traeger = db.Organisations(mydb.organisations, app=self, config=self.config)
+        self.config.dbs.streets = db.Streets(mydb.streets, app=self, config=self.config)
+
+        self.config.cities = self.cities
 
 
 def app(config, **local_config):

@@ -33,6 +33,17 @@ class SectionSchema(Schema):
     end_lat = Float()
     end_lng = Float()
 
+class LatLngSchema(Schema):
+    lat = Float()
+    lng = Float()
+
+class LatLngListSchema(Schema):
+    latlngs = List(LatLngSchema())
+
+class EditSchema(Schema):
+    user = String()
+    date = DateTime()
+
 class SiteSchema(Schema):
     """main schema for a street construction site"""
 
@@ -45,6 +56,7 @@ class SiteSchema(Schema):
     subtitle            = String(required = False) # project name or something like that
     description         = String(required = False) # long description if given
     organisation        = String() # who is doing this?
+    city                = String()
     sidewalk_only       = Boolean() # is this on a sidewalk only?
 
     # these field define when to show it on the map
@@ -54,25 +66,51 @@ class SiteSchema(Schema):
     # this field describes an approx. time frame in plain text
     approx_timeframe    = String()
 
+    # where the icon is positioned
+    lat                 = String()
+    lng                 = String()
+
+    # the drawable lines
+    #polyline            = List(LatLngSchema(), required = False)
+    polylines           = List(List(LatLngSchema()), required = False)
+    #polylines           = List(LatLngListSchema(), required = False)
+
     # shows if we have exact lat/lng
     exact_position = Boolean()
 
-    sections            = List(SectionSchema()) # list of sections/streets. Only one if it's only one location
+    # editor history
+    edit_history = List(EditSchema(), default=[])
+
+    #sections            = List(SectionSchema()) # list of sections/streets. Only one if it's only one location
 
 class Site(Record):
 
     schema = SiteSchema()
-    _protected = ['schema', 'collection', '_protected', '_schemaless', 'default_values', 'workflow_states', 'initial_workflow_state']
+<<<<<<< Updated upstream
+=======
+    _protected = ['schema', 'collection', '_protected', '_schemaless', 'default_values', 'workflow_states', 'initial_workflow_state', 'public_fields']
     initial_workflow_state = "created"
     default_values = {
         'created'       : datetime.datetime.utcnow,
         'updated'       : datetime.datetime.utcnow,
     }
 
-    workflow_states = {
-        'created'       : ['public'],
-        'public'        : ['created'],
-    }
+    public_fields = [
+        'city',
+        'subtitle',
+        'description',
+        'organisation',
+        'start_date',
+        'end_date',
+        'exact_position',
+        'approx_timeframe',
+        'approx_timeframe',
+        'lat',
+        'lng',
+        'sidewalk_only',
+        '_id',
+        'name',
+    ]
 
     def set_workflow(self, new_state):
         """set the workflow to a new state"""
@@ -95,13 +133,22 @@ class Site(Record):
             m = getattr(self, "on_wf_"+new_state)
             m(old_state = old_state)
         self.workflow = new_state
+>>>>>>> Stashed changes
+
 
     @property
-    def public(self):
-        """return whether the barcamp is public or not"""
-        return self.workflow in ['public']
+    def public_json(self):
+        """return a public representation of the site"""
+        data = [(a,v) for a,v in self.items() if a in self.public_fields]
+        return dict(data)
+
 
 class Sites(Collection):
 
     data_class = Site
     create_ids = True
+
+    @property
+    def active_sites(self):
+        now = datetime.datetime.now()
+        return self.find({'start_date':{'$lte':now}, 'end_date':{'$gte':now}}).sort("name", 1)

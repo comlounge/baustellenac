@@ -26,7 +26,10 @@ setup(name='baustellenac',
         "pymongo",
         "wtforms",
         "mongogogo",
+        "userbase",
         "setuptools",
+        "requests",
+        "geopy",
       ],
       entry_points="""
       [paste.app_factory]

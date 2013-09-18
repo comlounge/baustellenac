@@ -1,6 +1,7 @@
 #encoding=utf8
 
 import pymongo
+from datetime import datetime
 
 from .. import BaseHandler
 
@@ -11,8 +12,9 @@ class IndexView(BaseHandler):
 
     def get(self):
         """render the view"""
+        now = datetime.now()
         return self.render(
-            sites = self.config.dbs.baustellen.find().sort("name", 1),
+            sites = self.config.dbs.baustellen.active_sites
         )
     post = get
 

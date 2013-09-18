@@ -1,0 +1,68 @@
+{% extends "master.html" %}
+
+{% block content %}
+
+    <h2>Administrator - &Uuml;bersicht</h2>
+
+    <div class="row">
+        <div class="pull-right">
+            <a href="{{url_for('site_add')}}" class="right btn btn-primary"><i class="icon icon-white icon-plus"></i> Neue Baustelle anlegen</a>
+        </div>
+    </div>
+
+    <h3>Liste aller Baustellen</h3>
+    <div class="row">
+        <div class="span8">
+            <table class="table table-striped">
+                <thead>
+                    <th>Name</th>
+                    <!--th></th-->
+                    <th>zuletzt bearbeitet</th>
+                </thead>
+                <tbody>
+                {% for site in sites %}
+                    <tr data-name="{{site.name}}">
+                        <td class="span4">
+                            {% if site.city %} <div>{{config.cities.get(site.city,'')}} </div>{% endif %}
+                            {{site.name}} <span class="muted">({{site.approx_timeframe}})</span>
+                        </td>
+                        <!--td class="span1">
+                            {% if not site.exact_position %}
+                                <i data-title="Keine exakten Geodaten!" class="noposition icon-exclamation-sign"></i>
+                            {% endif %}
+                        </td-->
+                        <td class="span4">
+                            {% if site.edit_history|length > 0 %}
+                                {{site.edit_history[-1].date.strftime('%d.%m.%Y %H:%M')}} <div class="muted">{{site.edit_history[-1].user}}</div>
+                            {% endif %}
+                        </td>
+                        <td class="span2">
+                            <a href="{{url_for('site_edit', site_id=site._id)}}" class="btn btn-mini"><i class="icon-edit"></i> bearbeiten</a>
+                        </td>
+                        <td class="span1">
+                            <form name="site-remove-form" class="site-remove-form" action="{{url_for('site_remove', site_id=site._id)}}" method="POST">
+                                <button type="submit" class="pull-right remove-site btn btn-mini btn-danger"><i class="icon-white icon-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.site-remove-form').submit(function(){
+                row = $(this).parents('tr');
+                if (confirm('Baustelle '+$(row).data('name')+' wirklich löschen?')){
+                    return true;
+                } else {
+                    return false;
+                };
+            });
+        });
+    </script>
+{% endblock %}

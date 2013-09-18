@@ -9,7 +9,8 @@ class AllSites(BaseHandler):
     @asjson()
     def get(self):
         """render the view"""
-        return list(self.config.dbs.baustellen.find())
+        baustellen = list(self.config.dbs.baustellen.active_sites)
+        return [b.public_json for b in baustellen]
     post = get
 
 
@@ -20,5 +21,9 @@ class Site(BaseHandler):
     def get(self, site_id):
         """render the view"""
         #print self.config.dbs.baustellen.get(site_id)
-        return self.config.dbs.baustellen.get(site_id)
+        #return self.config.dbs.baustellen.get(site_id)
+        return {
+            'site' : self.config.dbs.baustellen.get(site_id).public_json,
+            'city_names' : self.config.cities
+        }
     post = get

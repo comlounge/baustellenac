@@ -1,1 +1,1 @@
-from base import BaseHandler, BaseForm
+from base import *

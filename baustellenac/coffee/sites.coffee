@@ -3,18 +3,23 @@ $.fn.sites = (opts = {}) ->
 
     map_zoom = 13
     max_zoom = 18
-    map = L.map('map').setView([50.7753455, 6.0838868], map_zoom)
+    current_zoom = 16
+    map = L.map('map',
+        center: [50.7753455, 6.0838868]
+        zoom: map_zoom
+    )
     markers = {}
+    polylines = []
     icon_default = L.icon(
         iconUrl: '/static/img/Under_construction_icon-red.svg',
-        iconSize: [38, 95],
+        iconSize: [38, 38],
         popupAnchor: [0, -15],
         shadowSize: [68, 95],
         shadowAnchor: [22, 94]
     )
     icon_sidewalk = L.icon(
         iconUrl: '/static/img/Under_construction_icon-yellow.svg',
-        iconSize: [32, 75],
+        iconSize: [32, 32],
         popupAnchor: [0, -15],
         shadowSize: [68, 95],
         shadowAnchor: [22, 94]
@@ -34,12 +39,17 @@ $.fn.sites = (opts = {}) ->
             make_marker($(this))
         )
 
-        $('.site').mouseover(() ->
-            markers[$(this).data('id')].openPopup()
-        )
         $('.site').click(() ->
-            show_infomodal($(this).data('id'))
+            if markers.hasOwnProperty($(this).data('id'))
+                map.panTo(markers[$(this).data('id')].getLatLng(), {'animate':true})
+                map.setZoom(current_zoom, {'animate':true})
+                markers[$(this).data('id')].openPopup()
+            show_polylines($(this))
         )
+        #$('.site').on('mouseout', on_site_out)
+        #$('.site').click(() ->
+        #    show_infomodal($(this).data('id'))
+        #)
 
         map.locate({setView: true, maxZoom: 2})
         map.on('locationfound', onLocationFound)
@@ -51,7 +61,6 @@ $.fn.sites = (opts = {}) ->
         )
 
     onLocationFound = (e) ->
-        console.log "yay"
         radius = e.accuracy / 2;
         L.marker(e.latlng).addTo(map)
             .bindPopup("You are within " + radius + " meters from this point").openPopup()
@@ -73,60 +82,56 @@ $.fn.sites = (opts = {}) ->
         )
 
     create_infomodal = (data) ->
+        site = data['site']
+        city_names = data['city_names']
         m = $('#infomodal')
-        m.find('.modal-header h3').html(data['name'])
+        m.find('.modal-header h3').html(site['name'])
 
         body = ""
         subtitle = $('<div class="row"></div>')
             .append('<div class="span2">Untertitel</div>')
-            .append('<div class="span4">'+data['subtitle']+'</div>')
+            .append('<div class="span4">'+site['subtitle']+'</div>')
         desc = $('<div class="row"></div>')
             .append('<div class="span2">Beschreibung</div>')
-            .append('<div class="span4">'+data['description']+'</div>')
+            .append('<div class="span4">'+site['description']+'</div>')
+        city = $('<div class="row"></div>')
+            .append('<div class="span2">Stadt</div>')
+            .append('<div class="span4">'+city_names[site['city']]+'</div>')
         organisation = $('<div class="row"></div>')
             .append('<div class="span2">Träger</div>')
-            .append('<div class="span4">'+data['organisation']+'</div>')
+            .append('<div class="span4">'+site['organisation']+'</div>')
         approx_time = $('<div class="row"></div>')
             .append('<div class="span2">Vorr. Zeitrahmen</div>')
-            .append('<div class="span4">'+data['approx_timeframe']+'</div>')
-        start_date = new Date(data['start_date'])
+            .append('<div class="span4">'+site['approx_timeframe']+'</div>')
+        start_date = new Date(site['start_date'])
         start_time = $('<div class="row"></div>')
             .append('<div class="span2">Beginn</div>')
             .append('<div class="span4">'+start_date.toLocaleDateString('de')+'</div>')
-        end_date = new Date(data['end_date'])
+        end_date = new Date(site['end_date'])
         end_time = $('<div class="row"></div>')
             .append('<div class="span2">Ende</div>')
             .append('<div class="span4">'+end_date.toLocaleDateString('de')+'</div>')
-        adr = data['sections'][0]['street']+', '+data['sections'][0]['zip']+' '+data['sections'][0]['city']
-        address = $('<div class="row"></div>')
-            .append('<div class="span2">Adresse</div>')
-            .append('<div class="span4">'+adr+'</div>')
+        #adr = data['sections'][0]['street']+', '+data['sections'][0]['zip']+' '+data['sections'][0]['city']
+        #address = $('<div class="row"></div>')
+        #    .append('<div class="span2">Adresse</div>')
+        #    .append('<div class="span4">'+adr+'</div>')
 
         m.find('.modal-body').html('')
         m.find('.modal-body')
             .append(subtitle)
             .append(desc)
+            .append(city)
             .append(organisation)
             .append(approx_time)
             .append(start_time)
             .append(end_time)
-            .append(address)
+            #.append(address)
 
     make_marker = (elem) ->
-        start_lat = elem.data('start_lat')
-        start_lng = elem.data('start_lng')
-        end_lat = elem.data('end_lat')
-        end_lng = elem.data('end_lng')
+        lat = elem.data('lat')
+        lng = elem.data('lng')
 
-        if start_lat != 'None' and start_lng != 'None'
-            if end_lat != 'None' and end_lng != 'None'
-                lat = (start_lat + end_lat)/2
-                lng = (start_lng + end_lng)/2
-                #make_route(start_lat,start_lng,end_lat,end_lng)
-            else
-                lat = start_lat
-                lng = start_lng
-
+        if lat != '' and lng != ''
             icon = icon_default
             if elem.data('sidewalk_only') == 'True'
                 icon = icon_sidewalk
@@ -134,6 +139,9 @@ $.fn.sites = (opts = {}) ->
             marker = L.marker([lat, lng], {icon: icon}).addTo(map)
             markers[elem.data('id')] = marker
             marker.bindPopup(make_infopopup(elem))
+            marker.on('click', ()->
+                show_polylines(elem)
+            )
 
 
     make_infopopup = (elem) ->
@@ -145,6 +153,7 @@ $.fn.sites = (opts = {}) ->
             info += elem.data('subtitle')+'<br/><br/>'
         else
             info += '<br/>'
+        info += 'Stadt: '+elem.data('city')+'<br/>'
         info += 'Träger: '+elem.data('organisation')+'<br/>'
         info += 'Vorr. Dauer: '+elem.data('approx_timeframe')+'<br/><br/>'
         info += '<button class="moreinfo" type="button" data-id="'+elem.data('id')+'">Mehr Informationen</button>'
@@ -164,6 +173,22 @@ $.fn.sites = (opts = {}) ->
                 alert("Error");
             ,
         )
+
+    show_polylines = (elem) ->
+        remove_polylines()
+        pl_latlngs = elem.data('polylines')
+        if pl_latlngs
+            for plll in pl_latlngs
+                pl = L.polyline(plll,
+                    weight: 10
+                )
+                polylines.push(pl)
+                map.addLayer(pl)
+
+    remove_polylines = ()->
+        for pl in polylines
+            if map.hasLayer(pl)
+                map.removeLayer(pl)
 
     $(this).each(init)
     this

@@ -7,7 +7,7 @@ from .. import BaseForm
 from wtforms import TextField, PasswordField, FieldList, BooleanField, IntegerField, DecimalField
 from wtforms import SelectField, DateField, TextAreaField, HiddenField, FloatField, Field, FormField, Form
 from wtforms import validators as v
-from wtforms.widgets import html_params, HTMLString, TextInput
+from wtforms.widgets import html_params, HTMLString, TextInput, HiddenInput, Select
 from jinja2 import Template
 
 ###
@@ -90,6 +90,23 @@ class JSONField(Field):
         else:
             self.data = u""
 
+class SelectWithPlaceholder(Select):
+
+    def __init__(self, multiple=False, placeholder=None):
+        self.multiple = multiple
+        self.placeholder = placeholder
+
+    def __call__(self, field, **kwargs):
+        kwargs.setdefault('id', field.id)
+        if self.multiple:
+            kwargs['multiple'] = True
+        html = ['<select %s>' % html_params(name=field.name, **kwargs)]
+        if self.placeholder is not None:
+            html.append('<option disabled selected style="display:none">%s</option>' % self.placeholder)
+        for val, label, selected in field.iter_choices():
+            html.append(self.render_option(val, label, selected))
+        html.append('</select>')
+        return HTMLString(''.join(html))
 
 class DatePickerWidget(TextInput):
 
@@ -105,9 +122,14 @@ class SiteForm(BaseForm):
     name = TextField(u"Name", default="")
     subtitle = TextField(u"zusätzl. Titel", default="")
     description = TextField(u"Beschreibung", default="")
-    organisation = TextField(u"Träger", default="")
+    #organisation = TextField(u"Träger", default="")
+    organisation = SelectField(u"Träger", choices=[], widget=SelectWithPlaceholder(placeholder=u"Wählen Sie einen Träger..."))
+    city = SelectField(u"Stadt", choices=[])
     sidewalk_only = BooleanField(u"Nur auf dem Gehweg?")
     name = TextField(u"Name", default="")
     start_date = DateField(u"Start", format='%d.%m.%Y', widget=DatePickerWidget()) # start date of project
     end_date = DateField(u"Ende", format='%d.%m.%Y', widget=DatePickerWidget()) # approx. end date of project
     approx_timeframe = TextField(u"ungefährer Zeitraum", default="")
+    lat = HiddenField(default='')
+    lng = HiddenField(default='')
+    polylines = JSONField(u'Polylines', default={}, widget=HiddenInput())

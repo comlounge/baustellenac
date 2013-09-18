@@ -1,0 +1,128 @@
+{% extends "master.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+    <link rel="stylesheet" href="http://leaflet.github.io/Leaflet.draw/leaflet.draw.css" />
+{% endblock %}
+
+{% block content %}
+    <div id="mapmodal" class="modal hide fade">
+        <div class="modal-map-header">
+            <a href="#" data-dismiss="modal" type="button" class="btn pull-right">Schließen</a>
+            <!--span class="inputfieldicon"></span>
+            <input type="text" name="mapsearch" id="mapsearch" class="mapsearch-search span6 search-query" data-provide="typeahead" placeholder="Suche">
+            <span class="inputfieldicon"><i class="icon-search"></i></span-->
+            <select id="streetsselect" class="span6">
+                <option></option>
+                {% for s in streets %}
+                    <option value='{{s.latlng|tojson|safe}}'>{{s.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mapcontainer">
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <div id="organisationmodal" class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Träger hinzufügen</h3>
+        </div>
+        <div class="modal-body">
+            <input type="text" id="organisation-name" class="span6">
+        </div>
+        <div class="modal-footer">
+            <a href="#" id="organisation_add" data-dismiss="modal" class="btn btn-info">Speichern</a>
+            <a href="#" data-dismiss="modal" class="btn">Schließen</a>
+        </div>
+    </div>
+
+
+
+
+
+    {% block site_header %}
+        <h3>neue Baustelle anlegen</h3>
+    {% endblock %}
+    <div class="row">
+        <div class="span8">
+
+            <form method="POST" action="{{url}}" id="site-form" class="form-horizontal validate">
+                {% block site_config %}
+                {% endblock %}
+                <fieldset>
+                    <!--legend>Kerndaten</legend-->
+                    {% block hidden_iputs %}
+                        <input id="lat" name="lat" type="hidden" value="">
+                        <input id="lng" name="lng" type="hidden" value="">
+                        <input id="polylines"
+                               name="polylines"
+                               type="hidden"
+                               value='[]'>
+                    {% endblock %}
+                    {{ macros.form_field(form.name, class="required large span6") }}
+                    {{ macros.form_field(form.subtitle, class="required span6") }}
+                    {{ macros.form_field(form.description, class="required span6") }}
+                    {{ macros.form_field(form.city, class="required span4") }}
+                    <div class="pull-right span2">
+                    <button type="button"
+                            id="organisation_add_button"
+                            class="btn btn-success pull-left"
+                            title="neuen Träger hinzufügen">
+                        <i class="icon-white icon-plus"></i>
+                    </button>
+                    </div>
+                    {{ macros.form_field(form.organisation, class="required span4") }}
+                    {{ macros.form_field(form.start_date, class="span2") }}
+                    {{ macros.form_field(form.end_date, class="span2") }}
+                    {{ macros.form_field(form.approx_timeframe, class="span6") }}
+                    {{ macros.form_field(form.sidewalk_only) }}
+                </fieldset>
+                <fieldset>
+                    <!--legend>Geodaten</legend-->
+                    <div class="control-group " id="field-latlng">
+                        <label class="control-label" for="latlng">Karte</label>
+                        <div class="controls" id="latlng-div">
+                            <div class="input">
+                                <div class="staticmapcontainer pull-left">
+                                    <div id="staticmap">
+                                    </div>
+                                </div>
+                                <a href="#" class="btn showmap">bearbeiten</a>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-actions">
+                        <input type="submit" class="btn btn-primary" value="Speichern">
+                        <a href="{{url_for('admin_overview')}}" class="btn">Abbrechen</a>
+                    </div>
+                </fieldset>
+            </form>
+
+        </div>
+        {% block history %}
+        {% endblock %}
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+    <script src="{{url_for("static", filename="js/leaflet.draw.js")}}"></script>
+    <link href="{{url_for("static", filename="select2-3.4.2/select2.css")}}" rel="stylesheet"/>
+    <script src="{{url_for("static", filename="select2-3.4.2/select2.js")}}"></script>
+    <script src="{{url_for("static", filename="js/edit_map.js")}}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.noposition').tooltip();
+
+            $(".date-picker").datepicker({
+                constrainInput: true,
+                dateFormat: "dd.mm.yy",
+            });
+        });
+    </script>
+{% endblock %}
