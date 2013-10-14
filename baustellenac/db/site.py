@@ -86,8 +86,6 @@ class SiteSchema(Schema):
 class Site(Record):
 
     schema = SiteSchema()
-<<<<<<< Updated upstream
-=======
     _protected = ['schema', 'collection', '_protected', '_schemaless', 'default_values', 'workflow_states', 'initial_workflow_state', 'public_fields']
     initial_workflow_state = "created"
     default_values = {
@@ -133,13 +131,18 @@ class Site(Record):
             m = getattr(self, "on_wf_"+new_state)
             m(old_state = old_state)
         self.workflow = new_state
->>>>>>> Stashed changes
 
 
     @property
     def public_json(self):
         """return a public representation of the site"""
-        data = [(a,v) for a,v in self.items() if a in self.public_fields]
+        data = dict([(a,v) for a,v in self.items() if a in self.public_fields])
+        # add last updated field
+        if self.edit_history is not None and len(self.edit_history)>0:
+            last_updated = self.edit_history[-1]['date']
+        else:
+            last_updated = datetime.datetime(2013,1,1) # dummy date
+        data['last_updated'] = last_updated
         return dict(data)
 
 
