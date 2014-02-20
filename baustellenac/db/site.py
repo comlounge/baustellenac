@@ -1,5 +1,6 @@
 from mongogogo import *
 import datetime
+import types
 
 __all__=["Site", "SiteSchema", "Sites"]
 
@@ -136,7 +137,17 @@ class Site(Record):
     @property
     def public_json(self):
         """return a public representation of the site"""
-        data = dict([(a,v) for a,v in self.items() if a in self.public_fields])
+        data = {}
+        for a,v in self.items():
+            if a not in self.public_fields:
+                continue
+            # convert to utf8 if possible
+            if type(v) == types.UnicodeType:
+                v = v
+                v = v.encode("utf-8")
+                print a,type(v), v
+            data[a] = v
+        #data = dict([(a,v) for a,v in self.items() if a in self.public_fields])
         # add last updated field
         if self.edit_history is not None and len(self.edit_history)>0:
             last_updated = self.edit_history[-1]['date']
