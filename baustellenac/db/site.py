@@ -2,8 +2,6 @@ from mongogogo import *
 import datetime
 import types
 
-# dummy for git
-
 __all__=["Site", "SiteSchema", "Sites"]
 
 class BaseError(Exception):
