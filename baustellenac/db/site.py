@@ -166,3 +166,7 @@ class Sites(Collection):
     def active_sites(self):
         now = datetime.datetime.now()
         return self.find({'start_date':{'$lte':now}, 'end_date':{'$gte':now}}).sort("name", 1)
+    
+    def get_distinct_cities_tuple(self):
+        cities = self.md.config.dbs.db.sites.distinct('city')
+        return [(c, self.md.config.cities.get(c, '')) for c in cities]

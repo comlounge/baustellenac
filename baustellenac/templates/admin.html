@@ -8,6 +8,24 @@
         <div class="pull-right">
             <a href="{{url_for('site_add')}}" class="right btn btn-primary"><i class="icon icon-white icon-plus"></i> Neue Baustelle anlegen</a>
         </div>
+        <div class="span9 well">
+            <h4>Filter</h4>
+            <form method="GET" action="{{url}}" id="filter-form" class="form-horizontal validate">    
+                <div class="span3">
+                    {{ form.city() }}
+                </div>
+                <div class="span3">
+                    {{ form.show_old_sites() }}
+                    &nbsp;
+                    <span style="margin-top:5px">
+                        {{ form.show_old_sites.label.text }}
+                    </span>
+                </div>
+                <div class="span2 pull-right">
+                    <input type="submit" class="btn btn-primary" value="Aktualisieren">
+                </div>
+            </form>
+        </div>
     </div>
 
     <h3>Liste aller Baustellen</h3>

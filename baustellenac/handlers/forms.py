@@ -133,3 +133,10 @@ class SiteForm(BaseForm):
     lat = HiddenField(default='')
     lng = HiddenField(default='')
     polylines = JSONField(u'Polylines', default={}, widget=HiddenInput())
+
+
+class SiteFilterForm(BaseForm):
+    """a form for filtering sites to be shown"""
+    
+    city = SelectField(u"Stadt", choices=[], widget=SelectWithPlaceholder(placeholder=u"Wählen Sie eine Stadt..."))
+    show_old_sites = BooleanField(u"Alte Baustellen anzeigen?")
